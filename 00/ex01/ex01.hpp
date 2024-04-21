@@ -5,4 +5,7 @@
 # include "Contact.hpp"
 # include "PhoneBook.hpp"
 
+void	add_contact(PhoneBook *phoneBook);
+void	search_contact(PhoneBook *phoneBook);
+
 #endif

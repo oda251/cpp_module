@@ -1,12 +1,13 @@
-NAME = megaphone
-SRCS = megaphone.cpp
+NAME = phonebook
+SRCS = main.cpp phonebook_handler.cpp
+CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
 
 all: $(NAME)
 
 $(NAME):
-	c++ -Wall -Werror -Wextra $(SRCS) -o $(NAME)
+	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)
 
 clean:
 
