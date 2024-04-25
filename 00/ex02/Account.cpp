@@ -6,12 +6,19 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 19:21:39 by yoda              #+#    #+#             */
-/*   Updated: 2024/04/21 20:37:44 by yoda             ###   ########.fr       */
+/*   Updated: 2024/04/25 17:10:06 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Account.hpp"
 #include <iostream>
+#include <iomanip>
+#include <ctime>
+
+int Account::_nbAccounts = 0;
+int Account::_totalAmount = 0;
+int Account::_totalNbDeposits = 0;
+int Account::_totalNbWithdrawals = 0;
 
 int Account::getNbAccounts( void ) {
 	return _nbAccounts;
@@ -34,68 +41,72 @@ void Account::displayAccountsInfos( void ) {
 }
 
 Account::Account( int initial_deposit ) {
-	_nbDeposits = initial_deposit;
+	_accountIndex = _nbAccounts;
+	_amount = initial_deposit;
+	_nbDeposits = 0;
+	_nbWithdrawals = 0;
 	_nbAccounts++;
-	_totalNbDeposits += initial_deposit;
+	_totalAmount += initial_deposit;
+	_displayTimestamp();
+	std::cout << "index:" << _accountIndex << ";";
+	std::cout << "amount:" << _amount << ";";
+	std::cout << "created" << std::endl;
 }
 
 Account::~Account( void ) {
+	_accountIndex = 
+	_nbAccounts--;
+	_totalAmount -= _amount;
+	_totalNbDeposits -= _nbDeposits;
+	_totalNbWithdrawals -= _nbWithdrawals;
+	_displayTimestamp();
+	std::cout << "index:" << _accountIndex << ";";
+	std::cout << "amount:" << _amount << ";";
+	std::cout << "closed" << std::endl;
 }
 
 void Account::makeDeposit( int deposit ) {
+	_amount += deposit;
+	_totalAmount += deposit;
+	_nbDeposits++;
+	_totalNbDeposits++;
+	_displayTimestamp();
+	std::cout << "index:" << _accountIndex << ";";
+	std::cout << "p_amount:" << _amount - deposit << ";";
+	std::cout << "deposit:" << deposit << ";";
+	std::cout << "amount:" << _amount << ";";
+	std::cout << "nb_deposits:" << _nbDeposits << std::endl;
 }
 bool Account::makeWithdrawal( int withdrawal ) {
+	_displayTimestamp();
+	std::cout << "index:" << _accountIndex << ";";
+	std::cout << "p_amount:" << _amount << ";";
+	if (withdrawal > _amount) {
+		std::cout << "withdrawal:refused" << std::endl;
+		return false;
+	}
+	_amount -= withdrawal;
+	_totalAmount -= withdrawal;
+	_nbWithdrawals++;
+	_totalNbWithdrawals++;
+	std::cout << "withdrawal:" << withdrawal << ";";
+	std::cout << "amount:" << _amount << ";";
+	std::cout << "nb_withdrawals:" << _nbWithdrawals << std::endl;
+	return true;
 }
 int Account::checkAmount( void ) const {
+	return _amount;
 }
 void Account::displayStatus( void ) const {
+	_displayTimestamp();
+	std::cout << "index:" << _accountIndex << ";";
+	std::cout << "amount:" << _amount << ";";
+	std::cout << "deposits:" << _nbDeposits << ";";
+	std::cout << "withdrawals:" << _nbWithdrawals << std::endl;
 }
 
-public:
-
-	typedef Account		t;
-
-	static int	getNbAccounts( void );
-	static int	getTotalAmount( void );
-	static int	getNbDeposits( void );
-	static int	getNbWithdrawals( void );
-	static void	displayAccountsInfos( void );
-
-	Account( int initial_deposit );
-	~Account( void );
-
-	void	makeDeposit( int deposit );
-	bool	makeWithdrawal( int withdrawal );
-	int		checkAmount( void ) const;
-	void	displayStatus( void ) const;
-
-
-private:
-
-	static int	_nbAccounts;
-	static int	_totalAmount;
-	static int	_totalNbDeposits;
-	static int	_totalNbWithdrawals;
-
-	static void	_displayTimestamp( void );
-
-	int				_accountIndex;
-	int				_amount;
-	int				_nbDeposits;
-	int				_nbWithdrawals;
-
-	Account( void );
-
-};
-
-
-
-// ************************************************************************** //
-// vim: set ts=4 sw=4 tw=80 noexpandtab:                                      //
-// -*- indent-tabs-mode:t;                                                   -*-
-// -*- mode: c++-mode;                                                       -*-
-// -*- fill-column: 75; comment-column: 75;                                  -*-
-// ************************************************************************** //
-
-
-#endif /* __ACCOUNT_H__ */
+void Account::_displayTimestamp( void ) {
+	std::time_t t = std::time(0);
+	std::tm* now = std::localtime(&t);
+	std::cout << "[" << std::put_time(now, "%Y%m%d_%H%M%S") << "] ";
+}
