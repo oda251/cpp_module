@@ -1,5 +1,19 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/04/25 17:31:12 by yoda              #+#    #+#              #
+#    Updated: 2024/04/25 17:54:52 by yoda             ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = phonebook
-SRCS = main.cpp phonebook_handler.cpp
+SRCS = main.cpp \
+	PhoneBook.cpp \
+	utils.cpp
 CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
