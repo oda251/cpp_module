@@ -1,7 +1,5 @@
-NAME = zombie
+NAME = brian
 SRCS = main.cpp \
-	Zombie.cpp \
-	zombieHorde.cpp
 CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
