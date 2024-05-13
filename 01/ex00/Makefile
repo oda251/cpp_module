@@ -9,6 +9,9 @@ CFLAGS = -Wall -Werror -Wextra
 
 all: $(NAME)
 
+leaks: fclean
+	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -D LEAKS
+
 $(NAME):
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)
 
@@ -19,4 +22,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re leaks

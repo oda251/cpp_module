@@ -1,15 +1,12 @@
-NAME = zombie
+NAME = harl
 SRCS = main.cpp \
-	Zombie.cpp \
-	zombieHorde.cpp
+	Harl.cpp
+
 CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
 
 all: $(NAME)
-
-leaks: fclean
-	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -D LEAKS
 
 $(NAME):
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)
