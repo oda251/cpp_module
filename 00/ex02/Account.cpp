@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Account.cpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/21 19:21:39 by yoda              #+#    #+#             */
-/*   Updated: 2024/04/25 17:10:06 by yoda             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Account.hpp"
 #include <iostream>
 #include <iomanip>
@@ -54,7 +42,6 @@ Account::Account( int initial_deposit ) {
 }
 
 Account::~Account( void ) {
-	_accountIndex = 
 	_nbAccounts--;
 	_totalAmount -= _amount;
 	_totalNbDeposits -= _nbDeposits;
@@ -108,5 +95,7 @@ void Account::displayStatus( void ) const {
 void Account::_displayTimestamp( void ) {
 	std::time_t t = std::time(0);
 	std::tm* now = std::localtime(&t);
-	std::cout << "[" << std::put_time(now, "%Y%m%d_%H%M%S") << "] ";
+	char buf[20];
+	strftime(buf, sizeof(buf), "%Y%m%d_%H%M%S", now);
+	std::cout << "[" << buf << "] ";
 }

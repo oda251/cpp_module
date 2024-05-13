@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:39:35 by yoda              #+#    #+#             */
-/*   Updated: 2024/04/25 17:41:53 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/14 04:19:15 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@ bool	is_valid_phonenum_char(char c) {
 }
 
 bool	is_valid_phonenumber(std::string phonenumber) {
-	return std::all_of(phonenumber.begin(), phonenumber.end(), is_valid_phonenum_char);
+	for (size_t i = 0; i < phonenumber.length(); i++) {
+		if (!is_valid_phonenum_char(phonenumber[i])) {
+			return false;
+		}
+	}
+	return true;
 }
 
 std::string	truncate(std::string str) {

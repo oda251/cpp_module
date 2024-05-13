@@ -6,11 +6,22 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:31:09 by yoda              #+#    #+#             */
-/*   Updated: 2024/04/25 17:46:03 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/14 04:31:33 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
+#include <iostream>
+#include <cstdlib>
+
+__attribute__((destructor))
+void    destructor(void)
+{
+	#ifdef LEAKS
+	std::cout << "--- Destructor ---" << std::endl;
+	system("leaks -q phonebook");
+	#endif
+}
 
 int	main() {
 	std::string input;

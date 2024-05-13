@@ -6,11 +6,13 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:31:16 by yoda              #+#    #+#             */
-/*   Updated: 2024/04/25 18:38:29 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/14 04:43:04 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
+#include <iostream>
+#include <limits>
 
 void	PhoneBook::searchContact() {
 	if (NumberOfcontacts == 0) {
@@ -24,7 +26,12 @@ void	PhoneBook::searchContact() {
 	int index;
 	std::cout << "Enter index: ";
 	std::cin >> index;
-	if (index < 0 || index >= NumberOfcontacts) {
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid index" << std::endl;
+		return;
+	} else if (index < 0 || index >= NumberOfcontacts) {
 		std::cout << "Invalid index" << std::endl;
 		return;
 	} else {

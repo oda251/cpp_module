@@ -6,7 +6,7 @@
 #    By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/25 17:31:12 by yoda              #+#    #+#              #
-#    Updated: 2024/04/25 17:54:52 by yoda             ###   ########.fr        #
+#    Updated: 2024/05/14 04:30:35 by yoda             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,9 @@ CFLAGS = -Wall -Werror -Wextra
 
 all: $(NAME)
 
+leaks : fclean
+	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -D LEAKS
+
 $(NAME):
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)
 
@@ -30,4 +33,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re leaks
