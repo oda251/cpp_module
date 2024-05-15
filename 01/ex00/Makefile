@@ -6,11 +6,12 @@ SRCS = main.cpp \
 CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
+LEAKS = leaks -q $(NAME)
 
 all: $(NAME)
 
 leaks: fclean
-	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -D LEAKS
+	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -D LEAKS=$(LEAKS)
 
 $(NAME):
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)

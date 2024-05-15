@@ -8,13 +8,14 @@ class Fixed {
 		static const int _fractionalBits = 8;
 	public:
 		Fixed();
-		Fixed(const int value);
-		Fixed(const float value);
 		Fixed(const Fixed &src);
 		~Fixed();
 		Fixed &operator=(const Fixed &src);
 		int getRawBits(void) const;
 		void setRawBits(int const raw);
+		// ex02
+		Fixed(const int value);
+		Fixed(const float value);
 		float toFloat(void) const;
 		int toInt(void) const;
 };

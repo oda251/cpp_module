@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 16:49:48 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/14 04:06:22 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/16 03:59:38 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void    destructor(void)
 {
 	#ifdef LEAKS
 	std::cout << "--- Destructor ---" << std::endl;
-	system("leaks -q violence");
+	system(LEAKS);
 	#endif
 }
 

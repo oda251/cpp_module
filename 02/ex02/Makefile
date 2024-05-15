@@ -1,4 +1,4 @@
-NAME = fixed
+NAME = talk
 SRCS = main.cpp \
 	Fixed.cpp
 

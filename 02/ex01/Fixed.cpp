@@ -6,19 +6,6 @@
 Fixed::Fixed() : _fixedPointValue(0) {
 	std::cout << "Default constructor called" << std::endl;
 }
-Fixed::Fixed(const int value) : _fixedPointValue(value << _fractionalBits) {
-	std::cout << "Int constructor called" << std::endl;
-	if (std::numeric_limits<int>::max() >> _fractionalBits < value
-		|| std::numeric_limits<int>::min() >> _fractionalBits > value)
-		std::cout << "\tOverflow" << std::endl;
-}
-Fixed::Fixed(const float value) : _fixedPointValue(roundf(value * (1 << _fractionalBits))){
-	std::cout << "Float constructor called" << std::endl;
-	float max = static_cast<float>(std::numeric_limits<int>::max() >> _fractionalBits);
-	float min = static_cast<float>(std::numeric_limits<int>::min() >> _fractionalBits);
-	if (max < value || min > value)
-		std::cout << "\tOverflow" << std::endl;
-}
 Fixed::Fixed(const Fixed &src) {
 	std::cout << "Copy constructor called" << std::endl;
 	*this = src;
@@ -39,6 +26,21 @@ int Fixed::getRawBits(void) const {
 void Fixed::setRawBits(int const raw) {
 	std::cout << "setRawBits member function called" << std::endl;
 	_fixedPointValue = raw;
+}
+
+// ex01
+Fixed::Fixed(const int value) : _fixedPointValue(value << _fractionalBits) {
+	std::cout << "Int constructor called" << std::endl;
+	if (std::numeric_limits<int>::max() >> _fractionalBits < value
+		|| std::numeric_limits<int>::min() >> _fractionalBits > value)
+		std::cerr << "\tOverflow" << std::endl;
+}
+Fixed::Fixed(const float value) : _fixedPointValue(roundf(value * (1 << _fractionalBits))){
+	std::cout << "Float constructor called" << std::endl;
+	float max = static_cast<float>(std::numeric_limits<int>::max() >> _fractionalBits);
+	float min = static_cast<float>(std::numeric_limits<int>::min() >> _fractionalBits);
+	if (max < value || min > value)
+		std::cerr << "\tOverflow" << std::endl;
 }
 float Fixed::toFloat(void) const {
 	return static_cast<float>(_fixedPointValue) / (1 << _fractionalBits);

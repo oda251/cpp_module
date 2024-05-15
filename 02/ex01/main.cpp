@@ -8,7 +8,7 @@ void    destructor(void)
 {
 	#ifdef LEAKS
 	std::cout << "--- Destructor ---" << std::endl;
-	system("leaks -q fixed");
+	system(LEAKS);
 	#endif
 }
 
