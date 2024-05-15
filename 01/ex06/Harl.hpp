@@ -9,12 +9,12 @@
 
 class Harl {
 	private:
-		inline void debug(void) { std::cout << HARL_DEBUG << std::endl;}
-		inline void info(void) { std::cout << HARL_INFO << std::endl;}
-		inline void warning(void) { std::cout << HARL_WARNING << std::endl;}
-		inline void error(void) { std::cout << HARL_ERROR << std::endl;}
+		void debug(void);
+		void info(void);
+		void warning(void);
+		void error(void);
 	public:
-		Harl(void) {};
+		Harl(void);
 		void complain(std::string level);
 };
 
