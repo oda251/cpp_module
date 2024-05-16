@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:31:06 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/16 14:27:37 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/16 18:44:12 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,24 @@ class Contact {
 	public:
 		Contact();
 		~Contact();
-		void	displayTrunced();
-		void	display();
+		void	setIndex(int index);
+		bool	setFirstName(std::string firstName);
+		bool	setLastName(std::string lastName);
+		bool	setNickname(std::string nickname);
+		bool	setPhoneNumber(std::string phoneNumber);
+		bool	setDarkestSecret(std::string);
+		int		getIndex() const;
+		std::string	getFirstName() const;
+		std::string	getLastName() const;
+		std::string	getNickname() const;
+		std::string	getPhoneNumber() const;
+		std::string	getDarkestSecret() const;
+		void	displayTrunced() const;
+		void	display() const;
+
+		Contact &operator=(const Contact &rhs);
 };
 
-void	displayHeader();
+void	displayContactHeader();
 
 #endif

@@ -6,11 +6,12 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:31:09 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/16 03:57:57 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/16 18:50:00 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
+#include "utils.hpp"
 #include <iostream>
 #include <cstdlib>
 
@@ -30,9 +31,9 @@ int	main() {
 	while (1)
 	{
 		std::cout << "Enter a command: ";
-		std::cin >> input;
+		safe_cin(input);
 		if (input == "ADD") {
-			phoneBook.addContact();
+			phoneBook.inputContact();
 		} else if (input == "SEARCH") {
 			phoneBook.searchContact();
 		} else if (input == "EXIT") {

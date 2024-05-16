@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.cpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/25 17:39:35 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/14 04:19:15 by yoda             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "utils.hpp"
 
 bool	is_valid_phonenum_char(char c) {
@@ -25,6 +13,15 @@ bool	is_valid_phonenumber(std::string phonenumber) {
 	return true;
 }
 
+bool	is_alnum(std::string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!std::isalnum(str[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
 std::string	truncate(std::string str) {
 	if (str.length() > 10) {
 		str.resize(9);
@@ -33,4 +30,46 @@ std::string	truncate(std::string str) {
 		str.insert(0, 10 - str.length(), ' ');
 	}
 	return str;
+}
+
+void reset_cin(void) {
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+void	safe_cin(std::string &str) {
+	while (true) {
+		std::getline(std::cin, str);
+		if (std::cin.eof()) {
+			std::cout << "EXIT" << std::endl;
+			exit(EXIT_FAILURE);
+		} else if (std::cin.bad()) {
+			std::cout << "cin.bad" << std::endl;
+			exit(EXIT_FAILURE);
+		} else if (std::cin.fail()) {
+			std::cout << "Invalid input" << std::endl;
+			reset_cin();
+		} else {
+			break;
+		}
+	}
+}
+
+void	safe_cin_int(int &num) {
+	while (true) {
+		std::cin >> num;
+		if (std::cin.eof()) {
+			std::cout << "EXIT" << std::endl;
+			exit(EXIT_FAILURE);
+		} else if (std::cin.bad()) {
+			std::cout << "cin.bad" << std::endl;
+			exit(EXIT_FAILURE);
+		} else if (std::cin.fail()) {
+			std::cout << "Invalid input" << std::endl;
+			reset_cin();
+		} else {
+			reset_cin();
+			break;
+		}
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:31:19 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/16 14:28:06 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/16 18:37:14 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@
 
 class PhoneBook {
 	private:
-		Contact	*_contacts[8];
-		int		_NumberOfcontacts;
-		void	_addContact(Contact *contact);
-		Contact	*_getContact(int index);
-	
+		int					_NumberOfcontacts;
+		static const int	_maxContacts = 8;
+		Contact				_contacts[8];
+
 	public:
 		PhoneBook();
 		~PhoneBook();
+		int		getNumberOfcontacts();
+		void	addContact(Contact contact);
+		Contact	*getContact(int index);
 		void	searchContact();
-		void	addContact();
-
+		void	inputContact();
 };
 
 #endif

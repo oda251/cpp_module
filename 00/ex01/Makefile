@@ -6,7 +6,7 @@
 #    By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/25 17:31:12 by yoda              #+#    #+#              #
-#    Updated: 2024/05/16 14:13:48 by yoda             ###   ########.fr        #
+#    Updated: 2024/05/16 15:46:30 by yoda             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,9 @@ LEAKS = leaks -q $(NAME)
 
 all: $(NAME)
 
+run: all
+	./$(NAME)
+
 leaks : fclean
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -D LEAKS=$(LEAKS)
 
@@ -35,4 +38,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re leaks
+.PHONY: all clean fclean re leaks run

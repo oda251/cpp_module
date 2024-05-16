@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:31:16 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/16 14:17:33 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/16 19:26:45 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,82 +14,92 @@
 #include <iostream>
 #include <limits>
 
-void PhoneBook::_addContact(Contact *contact) {
+int	PhoneBook::getNumberOfcontacts() {
+	return _NumberOfcontacts;
+};
+void PhoneBook::addContact(Contact contact) {
 	if (_NumberOfcontacts < 8) {
-		contact->index = _NumberOfcontacts;
+		contact.setIndex(_NumberOfcontacts);
 		_contacts[_NumberOfcontacts] = contact;
 		_NumberOfcontacts++;
 	}
 	else {
-		delete _contacts[0];
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < _maxContacts - 1; i++) {
 			_contacts[i] = _contacts[i + 1];
-			_contacts[i]->index = i;
+			_contacts[i].setIndex(i);
 		}
-		contact->index = 7;
-		_contacts[7] = contact;
+		std::cout << "1" << std::endl;
+		contact.setIndex(_maxContacts - 1);
+		std::cout << "1" << std::endl;
+		_contacts[_maxContacts - 1] = contact;
 	}
 };
-Contact *PhoneBook::_getContact(int index) {
+Contact *PhoneBook::getContact(int index) {
 	if (index < 0 || index >= _NumberOfcontacts) {
 		return NULL;
 	} else {
-		return _contacts[index];
+		return &_contacts[index];
 	}
 };
 
 PhoneBook::PhoneBook() : _NumberOfcontacts(0) {
 	for (int i = 0; i < 8; i++) {
-		_contacts[i] = NULL;
+		_contacts[i] = Contact();
 	}
 };
-PhoneBook::~PhoneBook() {
-	for (int i = 0; i < _NumberOfcontacts; i++) {
-		delete _contacts[i];
+PhoneBook::~PhoneBook() {};
+
+void	PhoneBook::inputContact() {
+	Contact contact;
+	std::string	input;
+	contact.setIndex(_NumberOfcontacts);
+	std::cout << "Enter first name: ";
+	safe_cin(input);
+	while (!contact.setFirstName(input)) {
+		std::cout << "Invalid first name.\nRe-enter: " << std::endl;
+		safe_cin(input);
 	}
-};
+	std::cout << "Enter last name: ";
+	safe_cin(input);
+	while (!contact.setLastName(input)) {
+		std::cout << "Invalid last name.\nRe-enter: " << std::endl;
+		safe_cin(input);
+	}
+	std::cout << "Enter nickname: ";
+	safe_cin(input);
+	while (!contact.setNickname(input)) {
+		std::cout << "Invalid nickname.\nRe-enter: " << std::endl;
+		safe_cin(input);
+	}
+	std::cout << "Enter phone number: ";
+	safe_cin(input);
+	while (!contact.setPhoneNumber(input)) {
+		std::cout << "Invalid phone number.\nRe-enter: " << std::endl;
+		safe_cin(input);
+	}
+	std::cout << "Enter darkest secret: ";
+	safe_cin(input);
+	contact.setDarkestSecret(input);
+	addContact(contact);
+	std::cout << "SUCCESS" << std::endl;
+}
+
 void	PhoneBook::searchContact() {
 	if (_NumberOfcontacts == 0) {
-		std::cout << "No _contacts registered" << std::endl;
+		std::cout << "No contacts registered" << std::endl;
 		return;
 	}
-	displayHeader();
+	displayContactHeader();
 	for (int i=0; i<_NumberOfcontacts; i++) {
-		_contacts[i]->displayTrunced();
+		_contacts[i].displayTrunced();
 	}
 	int index;
 	std::cout << "Enter index: ";
-	std::cin >> index;
-	if (std::cin.fail()) {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		std::cout << "Invalid index" << std::endl;
-		return;
-	} else if (index < 0 || index >= _NumberOfcontacts) {
+	safe_cin_int(index);
+	if (index < 0 || index >= _NumberOfcontacts) {
 		std::cout << "Invalid index" << std::endl;
 		return;
 	} else {
-		_contacts[index]->display();
+		_contacts[index].display();
 	}
-}
-
-void	PhoneBook::addContact() {
-	Contact *contact = new Contact();
-	contact->index = _NumberOfcontacts;
-	std::cout << "Enter first name: ";
-	std::cin >> contact->firstName;
-	std::cout << "Enter last name: ";
-	std::cin >> contact->lastName;
-	std::cout << "Enter nickname: ";
-	std::cin >> contact->nickname;
-	std::cout << "Enter phone number: ";
-	std::cin >> contact->phoneNumber;
-	while (!is_valid_phonenumber(contact->phoneNumber)) {
-		std::cout << "Invalid phone number.\nRe-enter: ";
-		std::cin >> contact->phoneNumber;
-	}
-	std::cout << "Enter darkest secret: ";
-	std::cin >> contact->darkestSecret;
-	_addContact(contact);
-	std::cout << "SUCCESS" << std::endl;
 }
