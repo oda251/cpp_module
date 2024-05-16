@@ -16,9 +16,7 @@ void PhoneBook::addContact(Contact contact) {
 			_contacts[i] = _contacts[i + 1];
 			_contacts[i].setIndex(i);
 		}
-		std::cout << "1" << std::endl;
 		contact.setIndex(_maxContacts - 1);
-		std::cout << "1" << std::endl;
 		_contacts[_maxContacts - 1] = contact;
 	}
 };
