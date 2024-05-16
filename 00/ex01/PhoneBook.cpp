@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:31:16 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/16 00:59:45 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/16 14:17:33 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void PhoneBook::_addContact(Contact *contact) {
 	else {
 		delete _contacts[0];
 		for (int i = 0; i < 7; i++) {
-			_contacts[i]->index = i;
 			_contacts[i] = _contacts[i + 1];
+			_contacts[i]->index = i;
 		}
 		contact->index = 7;
 		_contacts[7] = contact;
@@ -53,7 +53,7 @@ void	PhoneBook::searchContact() {
 		std::cout << "No _contacts registered" << std::endl;
 		return;
 	}
-	Contact::displayHeader();
+	displayHeader();
 	for (int i=0; i<_NumberOfcontacts; i++) {
 		_contacts[i]->displayTrunced();
 	}

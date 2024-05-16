@@ -6,12 +6,13 @@
 #    By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/25 17:31:12 by yoda              #+#    #+#              #
-#    Updated: 2024/05/16 03:57:50 by yoda             ###   ########.fr        #
+#    Updated: 2024/05/16 14:14:02 by yoda             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = phonebook
 SRCS = main.cpp \
+	Contact.cpp \
 	PhoneBook.cpp \
 	utils.cpp
 CC = c++
