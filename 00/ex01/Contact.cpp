@@ -3,20 +3,20 @@
 Contact::Contact() {};
 Contact::~Contact() {};
 
-void		Contact::displayTrunced() {
+void	Contact::displayTrunced() {
 	std::ostringstream oss;
-	oss << index;
+	oss << _index;
 	std::cout << truncate(oss.str()) << "|";
-	std::cout << truncate(firstName) << "|";
-	std::cout << truncate(lastName) << "|";
-	std::cout << truncate(nickname) << std::endl;
+	std::cout << truncate(_firstName) << "|";
+	std::cout << truncate(_lastName) << "|";
+	std::cout << truncate(_nickname) << std::endl;
 }
-void		Contact::display() {
-	std::cout << "First name: " << firstName << std::endl;
-	std::cout << "Last name: " << lastName << std::endl;
-	std::cout << "Nickname: " << nickname << std::endl;
-	std::cout << "Phone number: " << phoneNumber << std::endl;
-	std::cout << "Darkest secret: " << darkestSecret << std::endl;
+void	Contact::display() {
+	std::cout << "First name: " << _firstName << std::endl;
+	std::cout << "Last name: " << _lastName << std::endl;
+	std::cout << "Nickname: " << _nickname << std::endl;
+	std::cout << "Phone number: " << _phoneNumber << std::endl;
+	std::cout << "Darkest secret: " << _darkestSecret << std::endl;
 }
 
 void	displayHeader() {
