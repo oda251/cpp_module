@@ -5,7 +5,7 @@ SRCS = main.cpp \
 CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
-LEAKS = leaks -q $(NAME)
+LEAKS = '"leaks -q $(NAME)"'
 
 all: $(NAME)
 

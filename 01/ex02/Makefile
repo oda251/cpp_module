@@ -1,5 +1,5 @@
-NAME = brian
-SRCS = main.cpp \
+NAME = brain
+SRCS = main.cpp
 CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
@@ -19,4 +19,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re run

@@ -6,7 +6,7 @@
 /*   By: yoda <yoda@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 16:49:48 by yoda              #+#    #+#             */
-/*   Updated: 2024/05/16 03:58:46 by yoda             ###   ########.fr       */
+/*   Updated: 2024/05/17 00:19:55 by yoda             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void destructor(void)
 int main(void) {
 	Zombie* zombie1 = newZombie("Zombie1");
 	Zombie* zombie2 = newZombie("Zombie2");
+	zombie1->announce();
+	zombie2->announce();
 	randomChump("ZombieNeo");
 	delete zombie1;
 	delete zombie2;
