@@ -14,6 +14,9 @@ bool	is_valid_phonenumber(std::string phonenumber) {
 }
 
 bool	is_alnum(std::string str) {
+	if (str.length() == 0) {
+		return false;
+	}
 	for (size_t i = 0; i < str.length(); i++) {
 		if (!std::isalnum(str[i])) {
 			return false;
