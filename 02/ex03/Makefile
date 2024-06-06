@@ -1,6 +1,8 @@
-NAME = talk
+NAME = bsp
 SRCS = main.cpp \
-	Fixed.cpp
+	bsp.cpp \
+	Fixed.cpp \
+	Point.cpp
 
 CC = c++
 VERSION = -std=c++98
