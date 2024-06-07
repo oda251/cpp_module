@@ -64,12 +64,12 @@ Fixed Fixed::operator-(const Fixed &src) const {
 }
 Fixed Fixed::operator*(const Fixed &src) const {
 	Fixed res;
-	res._fixedPointValue = (_fixedPointValue * src._fixedPointValue) >> _fractionalBits;
+	res._fixedPointValue = (static_cast<long long>(_fixedPointValue) * src._fixedPointValue) >> _fractionalBits;
 	return res;
 }
 Fixed Fixed::operator/(const Fixed &src) const {
 	Fixed res;
-	res._fixedPointValue = (_fixedPointValue << _fractionalBits) / src._fixedPointValue;
+	res._fixedPointValue = (static_cast<long long>(_fixedPointValue) << _fractionalBits) / src._fixedPointValue;
 	return res;
 }
 
