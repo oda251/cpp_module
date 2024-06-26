@@ -41,6 +41,17 @@ DiamondTrap::~DiamondTrap() {
     std::cout << "DiamondTrap::" << getName() << " Destructor called" << std::endl;
 }
 
+DiamondTrap &DiamondTrap::operator=(const DiamondTrap &src) {
+	std::cout << "DiamondTrap::" << getName() << " Assignation operator called" << std::endl;
+	setName(src.getName());
+	setMaxHitPoints(src.getMaxHitPoints());
+	setMaxEnergyPoints(src.getMaxEnergyPoints());
+	setHitPoints(src.getHitPoints());
+	setEnergyPoints(src.getEnergyPoints());
+	setAttackDamage(src.getAttackDamage());
+	return *this;
+}
+
 std::string DiamondTrap::getName(void) const {
 	return _name;
 }

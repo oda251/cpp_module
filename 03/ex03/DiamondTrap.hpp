@@ -1,3 +1,4 @@
+#pragma once
 #include "FragTrap.hpp"
 #include "ScavTrap.hpp"
 
@@ -16,6 +17,7 @@ class DiamondTrap : public FragTrap, public ScavTrap
 		DiamondTrap(const std::string &name);
 		DiamondTrap(const DiamondTrap &src);
 		~DiamondTrap();
+		DiamondTrap &operator=(const DiamondTrap &src);
 		
 		std::string getName(void) const;
 		unsigned int getHitPoints(void) const;
