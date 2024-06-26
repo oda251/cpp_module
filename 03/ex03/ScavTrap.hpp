@@ -1,44 +1,21 @@
 #pragma once
 #include <iostream>
+#include "ClapTrap.hpp"
 
-class ScavTrap
+class ScavTrap : virtual public ClapTrap
 {
-    private:
-        std::string _name;
-		unsigned int _maxHitPoints;
-		unsigned int _maxEnergyPoints;
-        unsigned int _hitPoints;
-        unsigned int _energyPoints;
-        unsigned int _attackDamage;
-		bool _gateKeeperMode;
-        static const unsigned int _defaultMaxHitPoints = 100;
+	private:
+		static const unsigned int _defaultMaxHitPoints = 100;
         static const unsigned int _defaultMaxEnergyPoints = 50;
 		static const unsigned int _defaultAttackDamage = 20;
+		bool _gateKeeperMode;
 
-    public:
-        ScavTrap();
-        ScavTrap(const std::string &name);
-        ScavTrap(const ScavTrap &src);
-        ~ScavTrap();
-        ScavTrap &operator=(const ScavTrap &src);
+	public:
+		ScavTrap(void);
+		ScavTrap(std::string name);
+		ScavTrap(const ScavTrap& other);
+		~ScavTrap();
+		ScavTrap& operator=(const ScavTrap& other);
 
-        bool isAlive(void) const;
-		bool loseEnergy(void);
-		std::string getName(void) const;
-		unsigned int getMaxHitPoints(void) const;
-		unsigned int getMaxEnergyPoints(void) const;
-		unsigned int getHitPoints(void) const;
-		unsigned int getEnergyPoints(void) const;
-		unsigned int getAttackDamage(void) const;
-		bool setName(const std::string &name);
-		bool setMaxHitPoints(unsigned int maxHitPoints);
-		bool setMaxEnergyPoints(unsigned int maxEnergyPoints);
-		bool setHitPoints(unsigned int hitPoints);
-		bool setEnergyPoints(unsigned int energyPoints);
-		bool setAttackDamage(unsigned int attackDamage);
-
-        void attack(const std::string &target);
-        void takeDamage(unsigned int amount);
-        void beRepaired(unsigned int amount);
-		void guardGate(void);
+		void guardGate();
 };

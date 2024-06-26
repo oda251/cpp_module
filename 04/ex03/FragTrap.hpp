@@ -1,6 +1,6 @@
 #include "ClapTrap.hpp"
 
-class FragTrap : virtual public ClapTrap
+class FragTrap : public ClapTrap
 {
 	private:
 		static const unsigned int _maxHitPoints = 100;

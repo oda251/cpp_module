@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "ScavTrap.hpp"
+#include "FragTrap.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -13,9 +13,9 @@ void    destructor(void)
 }
 
 int main(void) {
-	ScavTrap defaultTrap;
-	ScavTrap nameTrap("Bob");
-	ScavTrap copyTrap(nameTrap);
+	FragTrap defaultTrap;
+	FragTrap nameTrap("Bob");
+	FragTrap copyTrap(nameTrap);
 
 	nameTrap.attack("target");
 	nameTrap.takeDamage(5);
@@ -27,12 +27,10 @@ int main(void) {
 	std::cout << nameTrap.getHitPoints() << std::endl;
 	std::cout << "--- Bob's EP is ---" << std::endl;
 	std::cout << nameTrap.getEnergyPoints() << std::endl;
-	std::cout << "--- Bob's AD is ---" << std::endl;
+	std::cout << "--- Bob ATK is ---" << std::endl;
 	std::cout << nameTrap.getAttackDamage() << std::endl;
-	std::cout << "--- Default enter gate-keeper mode ---" << std::endl;
-	defaultTrap.guardGate();
-	std::cout << "--- Default exit gate-keeper mode ---" << std::endl;
-	defaultTrap.guardGate();
+	std::cout << "--- highFivesGuys ---" << std::endl;
+	defaultTrap.highFivesGuys();
 	
 	return 0;
 }

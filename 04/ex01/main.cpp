@@ -23,12 +23,10 @@ int main(void) {
 	copyTrap.attack("target");
 	copyTrap.takeDamage(5);
 	copyTrap.beRepaired(5);
-	std::cout << "--- Bob's HP is ---" << std::endl;
-	std::cout << nameTrap.getHitPoints() << std::endl;
-	std::cout << "--- Bob's EP is ---" << std::endl;
-	std::cout << nameTrap.getEnergyPoints() << std::endl;
-	std::cout << "--- Bob's AD is ---" << std::endl;
-	std::cout << nameTrap.getAttackDamage() << std::endl;
+	std::cout << "--- Bob take extra damage ---" << std::endl;
+	copyTrap.takeDamage(100);
+	std::cout << "--- Dead Bob try to be repaired ---" << std::endl;
+	copyTrap.beRepaired(5);
 	std::cout << "--- Default enter gate-keeper mode ---" << std::endl;
 	defaultTrap.guardGate();
 	std::cout << "--- Default exit gate-keeper mode ---" << std::endl;

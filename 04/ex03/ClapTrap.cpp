@@ -141,10 +141,14 @@ void ClapTrap::attack(const std::string &target) {
     std::cout << _name << " attacks " << target << ", causing " << _attackDamage << " points of damage!" << std::endl;
 }
 void ClapTrap::takeDamage(unsigned int amount) {
+    if (amount == 0) {
+        std::cout << _name << " has arleady broken!" << std::endl;
+        return;
+    }
     if (_hitPoints < amount) {
         std::cout << _name << " took " << _hitPoints << " points of damage!" << std::endl;
         _hitPoints = 0;
-        std::cout << _name << " got broken!" << std::endl;
+        std::cout << _name << " broke!" << std::endl;
     } else {
         std::cout << _name << " took " << amount << " points of damage!" << std::endl;
         _hitPoints -= amount;
@@ -157,7 +161,7 @@ void ClapTrap::beRepaired(unsigned int amount) {
         std::cout << _name << " is already fully repaired!" << std::endl;
         return;
     }
-    if (amount > _maxHitPoints - _hitPoints) {
+    if (_hitPoints + amount > _maxHitPoints) {
         std::cout << _name << " was repaired by " << _maxHitPoints - _hitPoints << " points!" << std::endl;
         _hitPoints = _maxHitPoints;
         std::cout << _name << " is fully repaired!" << std::endl;
