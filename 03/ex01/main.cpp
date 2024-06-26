@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "ClapTrap.hpp"
+#include "ScavTrap.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -13,9 +13,9 @@ void    destructor(void)
 }
 
 int main(void) {
-	ClapTrap defaultTrap;
-	ClapTrap nameTrap("Bob");
-	ClapTrap copyTrap(nameTrap);
+	ScavTrap defaultTrap;
+	ScavTrap nameTrap("Bob");
+	ScavTrap copyTrap(nameTrap);
 
 	nameTrap.attack("target");
 	nameTrap.takeDamage(5);
@@ -27,9 +27,10 @@ int main(void) {
 	copyTrap.takeDamage(100);
 	std::cout << "--- Dead Bob try to be repaired ---" << std::endl;
 	copyTrap.beRepaired(5);
-	std::cout << "--- Default try to attach 11 times ---" << std::endl;
-	for (int i = 0; i < 11; i++)
-		defaultTrap.attack("target");
+	std::cout << "--- Default enter gate-keeper mode ---" << std::endl;
+	defaultTrap.guardGate();
+	std::cout << "--- Default exit gate-keeper mode ---" << std::endl;
+	defaultTrap.guardGate();
 	
 	return 0;
 }

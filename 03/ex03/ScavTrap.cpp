@@ -1,6 +1,6 @@
-#include "ClapTrap.hpp"
+#include "ScavTrap.hpp"
 
-ClapTrap::ClapTrap() :
+ScavTrap::ScavTrap() :
 	_name("Default"),
 	_maxHitPoints(_defaultMaxHitPoints),
 	_maxEnergyPoints(_defaultMaxEnergyPoints),
@@ -8,9 +8,9 @@ ClapTrap::ClapTrap() :
 	_energyPoints(_maxEnergyPoints),
 	_attackDamage(_defaultAttackDamage)
 {
-	std::cout << "ClapTrap Default constructor called" << std::endl;
+	std::cout << "ScavTrap Default constructor called" << std::endl;
 }
-ClapTrap::ClapTrap(const std::string &name) :
+ScavTrap::ScavTrap(const std::string &name) :
 	_name(name),
 	_maxHitPoints(_defaultMaxHitPoints),
 	_maxEnergyPoints(_defaultMaxEnergyPoints),
@@ -18,9 +18,9 @@ ClapTrap::ClapTrap(const std::string &name) :
 	_energyPoints(_maxEnergyPoints),
 	_attackDamage(_defaultAttackDamage)
 {
-	std::cout << "ClapTrap::" << _name << " Name constructor called" << std::endl;
+	std::cout << "ScavTrap::" << _name << " Name constructor called" << std::endl;
 }
-ClapTrap::ClapTrap(const ClapTrap &src) :
+ScavTrap::ScavTrap(const ScavTrap &src) :
 	_name(src._name),
 	_maxHitPoints(src._maxHitPoints),
 	_maxEnergyPoints(src._maxEnergyPoints),
@@ -28,12 +28,12 @@ ClapTrap::ClapTrap(const ClapTrap &src) :
 	_energyPoints(src._energyPoints),
 	_attackDamage(src._attackDamage)
 {
-	std::cout << "ClapTrap::" << src._name << " Copy constructor called" << std::endl;
+	std::cout << "ScavTrap::" << src._name << " Copy constructor called" << std::endl;
 }
-ClapTrap::~ClapTrap() {
-    std::cout << "ClapTrap::" << _name << " Destructor called" << std::endl;
+ScavTrap::~ScavTrap() {
+    std::cout << "ScavTrap::" << _name << " Destructor called" << std::endl;
 }
-ClapTrap &ClapTrap::operator=(const ClapTrap &src) {
+ScavTrap &ScavTrap::operator=(const ScavTrap &src) {
     std::cout << "= called" << std::endl;
     _name = src._name;
     _hitPoints = src._hitPoints;
@@ -42,14 +42,14 @@ ClapTrap &ClapTrap::operator=(const ClapTrap &src) {
     return *this;
 }
 
-bool ClapTrap::isAlive(void) const {
+bool ScavTrap::isAlive(void) const {
     if (_hitPoints == 0) {
         std::cout << _name << " has been broken!" << std::endl;
         return false;
     }
 	return true;
 }
-bool ClapTrap::loseEnergy(void) {
+bool ScavTrap::loseEnergy(void) {
 	if (_energyPoints == 0) {
 		std::cout << _name << " has no energy!" << std::endl;
 		return false;
@@ -58,26 +58,26 @@ bool ClapTrap::loseEnergy(void) {
 	return true;
 }
 
-std::string ClapTrap::getName(void) const {
+std::string ScavTrap::getName(void) const {
 	return _name;
 }
-unsigned int ClapTrap::getMaxHitPoints(void) const {
+unsigned int ScavTrap::getMaxHitPoints(void) const {
 	return _maxHitPoints;
 }
-unsigned int ClapTrap::getMaxEnergyPoints(void) const {
+unsigned int ScavTrap::getMaxEnergyPoints(void) const {
 	return _maxEnergyPoints;
 }
-unsigned int ClapTrap::getHitPoints(void) const {
+unsigned int ScavTrap::getHitPoints(void) const {
 	return _hitPoints;
 }
-unsigned int ClapTrap::getEnergyPoints(void) const {
+unsigned int ScavTrap::getEnergyPoints(void) const {
 	return _energyPoints;
 }
-unsigned int ClapTrap::getAttackDamage(void) const {
+unsigned int ScavTrap::getAttackDamage(void) const {
 	return _attackDamage;
 }
 
-bool ClapTrap::setName(const std::string &name) {
+bool ScavTrap::setName(const std::string &name) {
 	if (name.empty()) {
 		std::cout << "Name cannot be empty!" << std::endl;
 		return false;
@@ -85,7 +85,7 @@ bool ClapTrap::setName(const std::string &name) {
 	_name = name;
 	return true;
 }
-bool ClapTrap::setMaxHitPoints(unsigned int maxHitPoints) {
+bool ScavTrap::setMaxHitPoints(unsigned int maxHitPoints) {
 	if (maxHitPoints < 0) {
 		std::cout << "Max hit points cannot be negative!" << std::endl;
 		return false;
@@ -96,7 +96,7 @@ bool ClapTrap::setMaxHitPoints(unsigned int maxHitPoints) {
 	}
 	return true;
 }
-bool ClapTrap::setMaxEnergyPoints(unsigned int maxEnergyPoints) {
+bool ScavTrap::setMaxEnergyPoints(unsigned int maxEnergyPoints) {
 	if (maxEnergyPoints < 0) {
 		std::cout << "Max energy points cannot be negative!" << std::endl;
 		return false;
@@ -107,7 +107,7 @@ bool ClapTrap::setMaxEnergyPoints(unsigned int maxEnergyPoints) {
 	}
 	return true;
 }
-bool ClapTrap::setHitPoints(unsigned int hitPoints) {
+bool ScavTrap::setHitPoints(unsigned int hitPoints) {
 	if (hitPoints < 0) {
 		std::cout << "Hit points cannot be negative!" << std::endl;
 		return false;
@@ -115,7 +115,7 @@ bool ClapTrap::setHitPoints(unsigned int hitPoints) {
 	_hitPoints = hitPoints;
 	return true;
 }
-bool ClapTrap::setEnergyPoints(unsigned int energyPoints) {
+bool ScavTrap::setEnergyPoints(unsigned int energyPoints) {
 	if (energyPoints < 0) {
 		std::cout << "Energy points cannot be negative!" << std::endl;
 		return false;
@@ -126,7 +126,7 @@ bool ClapTrap::setEnergyPoints(unsigned int energyPoints) {
 	_energyPoints = energyPoints;
 	return true;
 }
-bool ClapTrap::setAttackDamage(unsigned int attackDamage) {
+bool ScavTrap::setAttackDamage(unsigned int attackDamage) {
 	if (attackDamage < 0) {
 		std::cout << "Attack damage cannot be negative!" << std::endl;
 		return false;
@@ -135,12 +135,12 @@ bool ClapTrap::setAttackDamage(unsigned int attackDamage) {
 	return true;
 }
 
-void ClapTrap::attack(const std::string &target) {
+void ScavTrap::attack(const std::string &target) {
 	if (!isAlive() || !loseEnergy())
 		return;
     std::cout << _name << " attacks " << target << ", causing " << _attackDamage << " points of damage!" << std::endl;
 }
-void ClapTrap::takeDamage(unsigned int amount) {
+void ScavTrap::takeDamage(unsigned int amount) {
     if (amount == 0) {
         std::cout << _name << " has arleady broken!" << std::endl;
         return;
@@ -154,7 +154,7 @@ void ClapTrap::takeDamage(unsigned int amount) {
         _hitPoints -= amount;
     }
 }
-void ClapTrap::beRepaired(unsigned int amount) {
+void ScavTrap::beRepaired(unsigned int amount) {
 	if (!isAlive() || !loseEnergy())
 		return;
     if (_hitPoints == _maxHitPoints) {
@@ -169,4 +169,15 @@ void ClapTrap::beRepaired(unsigned int amount) {
         std::cout << _name << " was repaired by " << amount << " points!" << std::endl;
         _hitPoints += amount;
     }
+}
+void ScavTrap::guardGate(void) {
+	if (!isAlive() || !loseEnergy())
+		return;
+	if (_gateKeeperMode) {
+		std::cout << _name << " has exited gate keeper mode!" << std::endl;
+		_gateKeeperMode = false;
+	} else {
+		std::cout << _name << " has entered gate keeper mode!" << std::endl;
+		_gateKeeperMode = true;
+	}
 }

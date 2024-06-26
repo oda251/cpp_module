@@ -1,6 +1,8 @@
 NAME = trap
 SRCS = main.cpp \
-	ClapTrap.cpp
+	ClapTrap.cpp \
+	ScavTrap.cpp \
+	FragTrap.cpp
 
 CC = c++
 VERSION = -std=c++98

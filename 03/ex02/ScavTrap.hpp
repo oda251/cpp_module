@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-class ClapTrap
+class ScavTrap
 {
     private:
         std::string _name;
@@ -10,16 +10,17 @@ class ClapTrap
         unsigned int _hitPoints;
         unsigned int _energyPoints;
         unsigned int _attackDamage;
-        static const unsigned int _defaultMaxHitPoints = 10;
-        static const unsigned int _defaultMaxEnergyPoints = 10;
-		static const unsigned int _defaultAttackDamage = 0;
+		bool _gateKeeperMode;
+        static const unsigned int _defaultMaxHitPoints = 100;
+        static const unsigned int _defaultMaxEnergyPoints = 50;
+		static const unsigned int _defaultAttackDamage = 20;
 
     public:
-        ClapTrap();
-        ClapTrap(const std::string &name);
-        ClapTrap(const ClapTrap &src);
-        ~ClapTrap();
-        ClapTrap &operator=(const ClapTrap &src);
+        ScavTrap();
+        ScavTrap(const std::string &name);
+        ScavTrap(const ScavTrap &src);
+        ~ScavTrap();
+        ScavTrap &operator=(const ScavTrap &src);
 
         bool isAlive(void) const;
 		bool loseEnergy(void);
@@ -39,4 +40,5 @@ class ClapTrap
         void attack(const std::string &target);
         void takeDamage(unsigned int amount);
         void beRepaired(unsigned int amount);
+		void guardGate(void);
 };
