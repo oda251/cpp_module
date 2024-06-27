@@ -1,7 +1,11 @@
-NAME = trap
+NAME = poly
 SRCS = main.cpp \
-	ClapTrap.cpp \
-	ScavTrap.cpp
+	Animal.cpp \
+	Brain.cpp \
+	Cat.cpp \
+	Dog.cpp \
+	WrongAnimal.cpp \
+	WrongCat.cpp
 
 CC = c++
 VERSION = -std=c++98

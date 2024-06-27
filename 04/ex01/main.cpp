@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "ScavTrap.hpp"
+#include "Animal.hpp"
+#include "Cat.hpp"
+#include "Dog.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -13,24 +15,18 @@ void    destructor(void)
 }
 
 int main(void) {
-	ScavTrap defaultTrap;
-	ScavTrap nameTrap("Bob");
-	ScavTrap copyTrap(nameTrap);
+	Animal* arr[10];
 
-	nameTrap.attack("target");
-	nameTrap.takeDamage(5);
-	nameTrap.beRepaired(5);
-	copyTrap.attack("target");
-	copyTrap.takeDamage(5);
-	copyTrap.beRepaired(5);
-	std::cout << "--- Bob take extra damage ---" << std::endl;
-	copyTrap.takeDamage(100);
-	std::cout << "--- Dead Bob try to be repaired ---" << std::endl;
-	copyTrap.beRepaired(5);
-	std::cout << "--- Default enter gate-keeper mode ---" << std::endl;
-	defaultTrap.guardGate();
-	std::cout << "--- Default exit gate-keeper mode ---" << std::endl;
-	defaultTrap.guardGate();
-	
+	for (int i=0; i<10; i++) {
+		if (i < 5)
+			arr[i] = new Dog();
+		else
+			arr[i] = new Cat();
+	}
+
+	for (int i=0; i<10; i++) {
+		delete arr[i];
+	}
+
 	return 0;
 }

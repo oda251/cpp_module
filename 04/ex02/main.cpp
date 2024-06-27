@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "FragTrap.hpp"
+#include "AbstractAnimal.hpp"
+#include "Cat.hpp"
+#include "Dog.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -13,24 +15,7 @@ void    destructor(void)
 }
 
 int main(void) {
-	FragTrap defaultTrap;
-	FragTrap nameTrap("Bob");
-	FragTrap copyTrap(nameTrap);
+	AbstractAnimal a;
 
-	nameTrap.attack("target");
-	nameTrap.takeDamage(5);
-	nameTrap.beRepaired(5);
-	copyTrap.attack("target");
-	copyTrap.takeDamage(5);
-	copyTrap.beRepaired(5);
-	std::cout << "--- Bob's HP is ---" << std::endl;
-	std::cout << nameTrap.getHitPoints() << std::endl;
-	std::cout << "--- Bob's EP is ---" << std::endl;
-	std::cout << nameTrap.getEnergyPoints() << std::endl;
-	std::cout << "--- Bob ATK is ---" << std::endl;
-	std::cout << nameTrap.getAttackDamage() << std::endl;
-	std::cout << "--- highFivesGuys ---" << std::endl;
-	defaultTrap.highFivesGuys();
-	
 	return 0;
 }
