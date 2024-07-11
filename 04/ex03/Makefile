@@ -1,9 +1,10 @@
-NAME = trap
+NAME = materia
 SRCS = main.cpp \
-	ClapTrap.cpp \
-	ScavTrap.cpp \
-	FragTrap.cpp \
-	DiamondTrap.cpp
+	AMateria.cpp \
+	Character.cpp \
+	Cure.cpp \
+	Ice.cpp \
+	MateriaSource.cpp
 
 CC = c++
 VERSION = -std=c++98

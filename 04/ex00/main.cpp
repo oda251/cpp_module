@@ -51,31 +51,41 @@ int main(void) {
 	std::cout << "Animal copy constructor: ";
 	c = new Animal(*meta);
 	std::cout << c->getType() << std::endl;
+	delete c;
 	std::cout << "Dog copy constructor: ";
 	c = new Dog(*j);
 	std::cout << c->getType() << std::endl;
+	delete c;
 	std::cout << "Cat copy constructor: ";
 	c = new Cat(*i);
 	std::cout << c->getType() << std::endl;
+	delete c;
 	std::cout << "WrongAnimal copy constructor: ";
 	c = new WrongAnimal(*k);
 	std::cout << c->getType() << std::endl;
+	delete c;
 	std::cout << "WrongCat copy constructor: ";
 	c = new WrongCat(*l);
 	std::cout << c->getType() << std::endl;
+	delete c;
 	std::cout << std::endl;
 
 	std::cout << "--- makeSound ---" << std::endl;
 	std::cout << "Animal makeSound: ";
 	meta->makeSound();
+	delete meta;
 	std::cout << "Dog makeSound: ";
 	j->makeSound();
+	delete j;
 	std::cout << "Cat makeSound: ";
 	i->makeSound();
+	delete i;
 	std::cout << "WrongAnimal makeSound: ";
 	k->makeSound();
+	delete k;
 	std::cout << "WrongCat makeSound: ";
 	l->makeSound();
+	delete l;
 
 	return 0;
 }

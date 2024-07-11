@@ -5,6 +5,7 @@ class WrongCat : public WrongAnimal
 {
 	public:
 		WrongCat();
+		WrongCat(const WrongAnimal& other);
 		WrongCat(const WrongCat& other);
 		~WrongCat();
 		WrongCat& operator=(const WrongCat& other);

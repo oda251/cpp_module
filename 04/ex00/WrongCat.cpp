@@ -4,6 +4,9 @@
 WrongCat::WrongCat() : WrongAnimal("WrongCat") {
 	std::cout << "WrongCat default constructor" << std::endl;
 }
+WrongCat::WrongCat(const WrongAnimal& other) : WrongAnimal(other) {
+	std::cout << "WrongCat copy constructor" << std::endl;
+}
 WrongCat::WrongCat(const WrongCat& other) : WrongAnimal(other) {
 	std::cout << "WrongCat copy constructor" << std::endl;
 }
