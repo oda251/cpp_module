@@ -2,8 +2,12 @@
 #include "AMateria.hpp"
 #include "Cure.hpp"
 
-Cure::Cure() : AMateria("cure") {}
-Cure::Cure(Cure const &cure) : AMateria(cure) {}
+Cure::Cure() {
+	setType("cure");
+}
+Cure::Cure(Cure const &cure) {
+	*this = cure;
+}
 Cure &Cure::operator=(Cure const &cure) {
 	_type = cure.getType();
 	return *this;

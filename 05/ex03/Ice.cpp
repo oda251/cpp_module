@@ -1,9 +1,12 @@
 #include <iostream>
-#include "AMateria.hpp"
 #include "Ice.hpp"
 
-Ice::Ice() : AMateria("ice") {}
-Ice::Ice(Ice const &ice) : AMateria(ice) {}
+Ice::Ice() {
+	setType("ice");
+}
+Ice::Ice(Ice const &ice) {
+	*this = ice;
+}
 Ice &Ice::operator=(Ice const &ice) {
 	_type = ice.getType();
 	return *this;

@@ -1,11 +1,10 @@
-NAME = poly
+NAME = materia
 SRCS = main.cpp \
-	Animal.cpp \
-	Brain.cpp \
-	Cat.cpp \
-	Dog.cpp \
-	WrongAnimal.cpp \
-	WrongCat.cpp
+	AMateria.cpp \
+	Character.cpp \
+	Cure.cpp \
+	Ice.cpp \
+	MateriaSource.cpp
 
 CC = c++
 VERSION = -std=c++98

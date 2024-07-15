@@ -1,5 +1,6 @@
 NAME = poly
 SRCS = main.cpp \
+	AbstractAnimal.cpp \
 	Animal.cpp \
 	Brain.cpp \
 	Cat.cpp \

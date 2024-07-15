@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "Animal.hpp"
-// #include "Dog.hpp"
+#include "AbstractAnimal.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -14,11 +13,8 @@ void    destructor(void)
 }
 
 int main(void) {
-	// inability to instantiate abstract-class test
-	Animal a;
-
-	// Animal *a = new Dog();
-	// a->makeSound();
+	std::cout << "--- inability to instantiate abstract-class test ---";
+	AbstractAnimal a;
 
 	return 0;
 }

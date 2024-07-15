@@ -6,7 +6,6 @@
 #include "Cure.hpp"
 #include "Character.hpp"
 #include "MateriaSource.hpp"
-#include "IMateriaSource.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -23,8 +22,6 @@ int main(void) {
 	AMateria* tmp = NULL;
 	Character bob("bob");
 	MateriaSource src;
-	IMateriaSource *srcPtr = new MateriaSource();
-	delete srcPtr;
 
 	std::cout << "--- learnMateria -> equip -> use -> unequip ---" << std::endl;
 	src.learnMateria(ice);
