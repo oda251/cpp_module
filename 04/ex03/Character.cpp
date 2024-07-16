@@ -11,8 +11,10 @@ Character::Character(Character const & src) {
 Character & Character::operator=(Character const & src) {
 	_name = src.getName();
 	for (int i = 0; i < 4; i++) {
-		if (_inventory[i])
+		if (_inventory[i]) {
 			delete _inventory[i];
+			_inventory[i] = NULL;
+		}
 		if (src.getMateria(i))
 			_inventory[i] = src.getMateria(i)->clone();
 		else
