@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "AbstractAnimal.hpp"
+#include "Bureaucrat.hpp"
+#include "AForm.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -13,8 +14,6 @@ void    destructor(void)
 }
 
 int main(void) {
-	std::cout << "--- inability to instantiate abstract-class test ---";
-	AbstractAnimal a;
 
 	return 0;
 }

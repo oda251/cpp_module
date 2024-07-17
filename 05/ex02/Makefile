@@ -1,12 +1,7 @@
-NAME = poly
+NAME = app
 SRCS = main.cpp \
-	AbstractAnimal.cpp \
-	Animal.cpp \
-	Brain.cpp \
-	Cat.cpp \
-	Dog.cpp \
-	WrongAnimal.cpp \
-	WrongCat.cpp
+	Bureaucrat.cpp \
+	AForm.cpp
 
 CC = c++
 VERSION = -std=c++98
