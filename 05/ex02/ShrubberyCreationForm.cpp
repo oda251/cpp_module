@@ -68,20 +68,24 @@ void ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
 	std::ofstream out;
 	out.open(_target + "_shrubbery");
 	if (!out.is_open()) {
-		std::cerr << "couldn't open file." << std::endl;
-		throw std::exception();
+		throw FileOpeningFailureException();
 	}
 	char path[1024];
 	if (!getcwd(path, sizeof(path))) {
-		std::cerr << "couldn't get current working directory." << std::endl;
-		throw std::exception();
+		throw GetCwdFailureException();
 	}
 	DIR* dir = opendir(path);
 	if (!dir) {
-		std::cerr << "couldn't open directory." << std::endl;
-		throw std::exception();
+		throw FileOpeningFailureException();
 	}
 	out << path << "\n";
 	get_ascii_tree(path, out, dir, "");
 	out.close();
+}
+
+const char* ShrubberyCreationForm::GetCwdFailureException::what() const throw() {
+	return "Failed to get current working directory";
+}
+const char* ShrubberyCreationForm::FileOpeningFailureException::what() const throw() {
+	return "Failed to open file";
 }
