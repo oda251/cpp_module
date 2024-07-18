@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
 
 Bureaucrat::Bureaucrat(void) : _name("default"), _grade(150) {}
 Bureaucrat::Bureaucrat(std::string const &name, int grade) : _name(name)
@@ -51,16 +51,31 @@ std::ostream &operator<<(std::ostream &out, Bureaucrat const &bureaucrat) {
 }
 
 // ex01
-bool Bureaucrat::signForm(Form& form) const {
+bool Bureaucrat::signForm(AForm& AForm) const {
 	try
 	{
-		form.beSigned(*this);
-		std::cout << getName() << " signed " << form.getName() << std::endl;
+		AForm.beSigned(*this);
+		std::cout << getName() << " signed " << AForm.getName() << std::endl;
 		return true;
 	}
 	catch (std::exception &e)
 	{
-		std::cerr << getName() << " couldn't sign " << form.getName() << " because " << e.what() << std::endl;
+		std::cerr << getName() << " couldn't sign " << AForm.getName() << " because " << e.what() << std::endl;
+		return false;
+	}
+}
+
+// ex02
+bool Bureaucrat::executeForm(AForm const &AForm) const {
+	try
+	{
+		AForm.execute(*this);
+		std::cout << getName() << " executed " << AForm.getName() << std::endl;
+		return true;
+	}
+	catch (std::exception &e)
+	{
+		std::cerr << getName() << " couldn't execute " << AForm.getName() << " because " << e.what() << std::endl;
 		return false;
 	}
 }

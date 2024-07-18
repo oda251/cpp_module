@@ -1,7 +1,10 @@
 NAME = app
 SRCS = main.cpp \
 	Bureaucrat.cpp \
-	AForm.cpp
+	AForm.cpp \
+	ShrubberyCreationForm.cpp \
+	RobotomyRequestForm.cpp \
+	PresidentialPardonForm.cpp
 
 CC = c++
 VERSION = -std=c++98
@@ -20,6 +23,7 @@ run: all
 	./$(NAME)
 
 clean:
+	rm -f *_shrubbery
 
 fclean: clean
 	rm -f $(NAME)

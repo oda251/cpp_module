@@ -1,17 +1,18 @@
 #include "ShrubberyCreationForm.hpp"
 #include <fstream>
 #include <dirent.h>
+#include <unistd.h>
 #define CROSS " ├─"
 #define CORNER " └─"
 #define VERTICAL " │ "
 #define SPACE "   "
 
 ShrubberyCreationForm::ShrubberyCreationForm(void) :
-	AForm("ShrubberyCreationForm", SHRUBBERY_FORM_SIGNGRADE, SHRUBBERY_FORM_EXECGRADE),
+	AForm("ShrubberyCreationForm", _signGrade, _execGrade),
 	_target("default")
 	{}
 ShrubberyCreationForm::ShrubberyCreationForm(std::string const & target) :
-	AForm("ShrubberyCreationForm", SHRUBBERY_FORM_SIGNGRADE, SHRUBBERY_FORM_EXECGRADE),
+	AForm("ShrubberyCreationForm", _signGrade, _execGrade),
 	_target(target)
 	{}
 ShrubberyCreationForm::ShrubberyCreationForm(ShrubberyCreationForm const & src) :
@@ -33,32 +34,54 @@ void ShrubberyCreationForm::setTarget(std::string const & target) {
 	_target = target;
 }
 
-static std::string get_ascii_tree(std::ofstream out, DIR* dir, std::string prefix, bool is_last) {
+static void get_ascii_tree(std::string path, std::ofstream& out, DIR* dir, std::string prefix) {
 	struct dirent* entry;
-	while ((entry = readdir(dir))) {
+	struct dirent* next;
+	entry = readdir(dir);
+	next = readdir(dir);
+	while (entry) {
 		if (entry->d_type == DT_DIR) {
 			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-				continue;
+				goto label;
 			}
-			out << prefix << (is_last ? CORNER : CROSS) << entry->d_name << "\n";
-			get_ascii_tree(out, dir, prefix + (is_last ? SPACE : VERTICAL), false);
+			out << prefix << (next ? CROSS : CORNER) << entry->d_name << "\n";
+			std::string sub_path = path + "/" + entry->d_name;
+			DIR* subdir = opendir(sub_path.c_str());
+			get_ascii_tree(sub_path, out, subdir, prefix + (next ? VERTICAL : SPACE));
 		} else {
-			out << prefix << (is_last ? CORNER : CROSS) << entry->d_name << "\n";
+			out << prefix << (next ? CROSS : CORNER) << entry->d_name << "\n";
+		}
+		label:
+		entry = next;
+		if (next) {
+			next = readdir(dir);
 		}
 	}
-	return tree;
 }
 
 void ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
-	AForm::execute(executor);
+	if (!getSigned()) {
+		throw FormNotSignedException();
+	} else if (executor.getGrade() > _execGrade) {
+		throw GradeTooLowException();
+	}
 	std::ofstream out;
 	out.open(_target + "_shrubbery");
-	DIR* dir = opendir(".");
-	if (!dir) {
-		std::cerr << "couldn't open directory."
+	if (!out.is_open()) {
+		std::cerr << "couldn't open file." << std::endl;
 		throw std::exception();
 	}
-	out << ".\n";
-	get_ascii_tree_of_working_directory(dir, "", true);
-	file.close();
+	char path[1024];
+	if (!getcwd(path, sizeof(path))) {
+		std::cerr << "couldn't get current working directory." << std::endl;
+		throw std::exception();
+	}
+	DIR* dir = opendir(path);
+	if (!dir) {
+		std::cerr << "couldn't open directory." << std::endl;
+		throw std::exception();
+	}
+	out << path << "\n";
+	get_ascii_tree(path, out, dir, "");
+	out.close();
 }

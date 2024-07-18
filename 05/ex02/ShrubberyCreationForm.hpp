@@ -1,11 +1,11 @@
 #pragma once
 #include "AForm.hpp"
-#define SHRUBBERY_FORM_SIGNGRADE 145
-#define SHRUBBERY_FORM_EXECGRADE 137
 
 class ShrubberyCreationForm : public AForm {
 	private:
 		std::string _target;
+		static const int _signGrade = 145;
+		static const int _execGrade = 137;
 
 	public:
 		ShrubberyCreationForm(void);

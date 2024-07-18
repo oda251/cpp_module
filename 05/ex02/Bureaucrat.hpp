@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 
-class Form;
+class AForm;
 
 class Bureaucrat
 {
@@ -29,9 +29,11 @@ class Bureaucrat
 			public:
 				virtual const char *what() const throw();
 		};
-
 		// ex01
-		bool signForm(Form& form) const;
+		bool signForm(AForm& AForm) const;
+
+		// ex02
+		bool executeForm(AForm const &AForm) const;
 };
 
 std::ostream &operator<<(std::ostream &out, Bureaucrat const &bureaucrat);
