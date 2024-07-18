@@ -2,7 +2,6 @@
 #include <string>
 #include <cstdlib>
 #include "Animal.hpp"
-// #include "Dog.hpp"
 
 __attribute__((destructor))
 void    destructor(void)
@@ -13,6 +12,7 @@ void    destructor(void)
 	#endif
 }
 
+// #include "Dog.hpp"
 int main(void) {
 	// inability to instantiate abstract-class test
 	Animal a;

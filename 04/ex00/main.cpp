@@ -22,6 +22,7 @@ int main(void) {
 	WrongAnimal* k = new WrongAnimal();
 	WrongAnimal* l = new WrongCat();
 	Animal* c;
+	WrongAnimal* d;
 
 	std::cout << "--- type ---" << std::endl;
 	std::cout << "Animal: " << meta->getType() << std::endl;
@@ -61,13 +62,13 @@ int main(void) {
 	std::cout << c->getType() << std::endl;
 	delete c;
 	std::cout << "WrongAnimal copy constructor: ";
-	c = new WrongAnimal(*k);
-	std::cout << c->getType() << std::endl;
-	delete c;
+	d = new WrongAnimal(*k);
+	std::cout << d->getType() << std::endl;
+	delete d;
 	std::cout << "WrongCat copy constructor: ";
-	c = new WrongCat(*l);
-	std::cout << c->getType() << std::endl;
-	delete c;
+	d = new WrongCat(*l);
+	std::cout << d->getType() << std::endl;
+	delete d;
 	std::cout << std::endl;
 
 	std::cout << "--- makeSound ---" << std::endl;
