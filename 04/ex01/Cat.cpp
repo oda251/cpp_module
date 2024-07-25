@@ -16,6 +16,7 @@ Cat::~Cat() {
 }
 Cat& Cat::operator=(const Cat& other) {
 	Animal::operator=(other);
+	*brain = *other.brain;
 	return *this;
 }
 
