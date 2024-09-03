@@ -7,20 +7,39 @@
 #include "PresidentialPardonForm.hpp"
 #include "RobotomyRequestForm.hpp"
 
-__attribute__((destructor))
-void    destructor(void)
-{
-	#ifdef LEAKS
-	std::cout << "--- Destructor ---" << std::endl;
-	system(LEAKS);
-	#endif
-}
-
 int main(void) {
-{
-	Intern someRandomIntern;
-	AForm* rrf;
-	rrf = someRandomIntern.makeForm("robotomy request", "Bender");
-}
+	try {
+		Intern someRandomIntern;
+		AForm* rrf;
+		rrf = someRandomIntern.makeForm("robotomy request", "Bender");
+		delete rrf;
+	} catch(std::exception &e) {
+		std::cerr << e.what() << std::endl;
+	}
+	try {
+		Intern someRandomIntern;
+		AForm* rrf;
+		rrf = someRandomIntern.makeForm("presidential pardon", "Bender");
+		delete rrf;
+	} catch(std::exception &e) {
+		std::cerr << e.what() << std::endl;
+	}
+	try {
+		Intern someRandomIntern;
+		AForm* rrf;
+		rrf = someRandomIntern.makeForm("shrubbery creation", "Bender");
+		delete rrf;
+	} catch(std::exception &e) {
+		std::cerr << e.what() << std::endl;
+	}
+	try {
+		Intern someRandomIntern;
+		AForm* rrf;
+		rrf = someRandomIntern.makeForm("nonexistent form", "Bender");
+		delete rrf;
+	} catch(std::exception &e) {
+		std::cerr << e.what() << std::endl;
+	}
+	Intern::cleanUp();
 	return 0;
 }

@@ -1,7 +1,6 @@
 NAME = app
 SRCS = main.cpp \
-	Bureaucrat.cpp \
-	Form.cpp
+	SchalarConverter.cpp
 
 CC = c++
 VERSION = -std=c++98

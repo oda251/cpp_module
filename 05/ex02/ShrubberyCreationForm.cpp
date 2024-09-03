@@ -82,6 +82,7 @@ void ShrubberyCreationForm::execute(Bureaucrat const & executor) const {
 	out << path << "\n";
 	get_ascii_tree(path, out, dir, "");
 	out.close();
+	closedir(dir);
 }
 
 AForm *ShrubberyCreationForm::newForm(std::string const & target) const {

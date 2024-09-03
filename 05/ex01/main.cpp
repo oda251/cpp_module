@@ -4,15 +4,6 @@
 #include "Bureaucrat.hpp"
 #include "Form.hpp"
 
-__attribute__((destructor))
-void    destructor(void)
-{
-	#ifdef LEAKS
-	std::cout << "--- Destructor ---" << std::endl;
-	system(LEAKS);
-	#endif
-}
-
 int main(void) {
 	Bureaucrat boss = Bureaucrat("Boss", 1);
 	Bureaucrat underling = Bureaucrat("Underling", 150);

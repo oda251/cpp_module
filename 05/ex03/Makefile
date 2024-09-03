@@ -4,17 +4,19 @@ SRCS = main.cpp \
 	AForm.cpp \
 	ShrubberyCreationForm.cpp \
 	RobotomyRequestForm.cpp \
-	PresidentialPardonForm.cpp
+	PresidentialPardonForm.cpp \
+	Intern.cpp
 
 CC = c++
 VERSION = -std=c++98
 CFLAGS = -Wall -Werror -Wextra
-LEAKS = '"leaks -q $(NAME)"'
+LEAKS = '"valgrind --leak-check=full ./$(NAME)"'
 
 all: $(NAME)
 
 leaks: fclean
-	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -D LEAKS=$(LEAKS)
+	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -g
+	valgrind --leak-check=full ./$(NAME)
 
 $(NAME):
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)

@@ -9,6 +9,7 @@ Intern::Intern(Intern const &src) {
 }
 Intern::~Intern(void) {}
 Intern & Intern::operator=(Intern const &src) {
+  (void)src;
   return *this;
 }
 
