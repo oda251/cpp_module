@@ -10,13 +10,13 @@ all: $(NAME)
 
 leaks: fclean
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -g
-	valgrind --leak-check=full ./$(NAME)
+	@valgrind --leak-check=full ./$(NAME)
 
 $(NAME):
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)
 
 run: all
-	./$(NAME)
+	@./$(NAME)
 
 clean:
 

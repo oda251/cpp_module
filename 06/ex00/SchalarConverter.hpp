@@ -7,6 +7,7 @@ private:
   SchalarConverter(SchalarConverter const &other);
   SchalarConverter &operator=(SchalarConverter const &other);
   ~SchalarConverter(void);
+
 public:
   static void convert(std::string const &input);
 };
