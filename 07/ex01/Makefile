@@ -1,5 +1,6 @@
 NAME = app
 SRCS = main.cpp
+OBJS = $(SRCS:.cpp=.o)
 
 CC = c++
 VERSION = -std=c++98
@@ -11,13 +12,17 @@ leaks: fclean
 	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME) -g
 	@valgrind --leak-check=full ./$(NAME)
 
-$(NAME):
-	$(CC) $(VERSION) $(CFLAGS) $(SRCS) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(VERSION) $(CFLAGS) $(OBJS) -o $(NAME)
+
+$(OBJS): $(SRCS)
+	$(CC) $(VERSION) $(CFLAGS) -c $(SRCS)
 
 run: all
 	@./$(NAME)
 
 clean:
+	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)

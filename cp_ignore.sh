@@ -7,7 +7,7 @@ SOURCE_FILE=".gitignore"
 for i in $(seq -w 0 9); do
   DEST_DIR="$i"
   if [ -d "0$DEST_DIR" ]; then
-    cp "$SOURCE_FILE" "./0$DEST_DIR/"
+    cp -f "$SOURCE_FILE" "./0$DEST_DIR/"
     echo "Copied $SOURCE_FILE to 0$DEST_DIR/"
   else
     echo "Directory 0$DEST_DIR does not exist."

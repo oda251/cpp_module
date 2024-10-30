@@ -1,16 +1,19 @@
 #pragma once
+#include <string>
+#include <stdint.h>
 
 struct Data {
   int content;
 };
 
 class Serializer {
-  private:
-    Serializer();
-    Serializer(Serializer& src);
-    ~Serializer();
-    Serializer& operator=(Serializer& src);
-  public:
-    static uintptr_t serialize(Data *ptr);
-    static Data *deserialize(uintptr_t raw);
+private:
+  Serializer(void);
+  Serializer(Serializer const &other);
+  Serializer& operator=(Serializer const &other);
+  ~Serializer(void);
+
+public:
+  static uintptr_t serialize(Data *ptr);
+  static Data * deserialize(uintptr_t raw);
 };

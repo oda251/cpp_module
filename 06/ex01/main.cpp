@@ -1,26 +1,16 @@
 #include <iostream>
-#include "SchalarConverter.hpp"
+#include <stdint.h>
+#include "Serializer.hpp"
 
 int main(void) {
-	std::cout << "--- 0 ---" << std::endl;
-	SchalarConverter::convert("0");
-	std::cout << "--- 42 ---" << std::endl;
-	SchalarConverter::convert("42");
-	std::cout << "--- -42 ---" << std::endl;
-	SchalarConverter::convert("-42");
-	std::cout << "--- 42.42f ---" << std::endl;
-	SchalarConverter::convert("42.42f");
-	std::cout << "--- 42.42 ---" << std::endl;
-	SchalarConverter::convert("42.42");
-	std::cout << "--- nan ---" << std::endl;
-	SchalarConverter::convert("nan");
-	std::cout << "--- -inf ---" << std::endl;
-	SchalarConverter::convert("-inf");
-	std::cout << "--- +inf ---" << std::endl;
-	SchalarConverter::convert("+inf");
-	std::cout << "--- -inff ---" << std::endl;
-	SchalarConverter::convert("-inff");
-	std::cout << "--- +inff ---" << std::endl;
-	SchalarConverter::convert("+inff");
+	Data data;
+	int content = 42;
+	data.content = content;
+	uintptr_t raw = Serializer::serialize(&data);
+	Data *ptr = Serializer::deserialize(raw);
+	if (ptr->content == content)
+		std::cout << "Success" << std::endl;
+	else
+		std::cout << "Failure" << std::endl;
 	return 0;
 }

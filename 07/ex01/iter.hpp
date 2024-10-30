@@ -1,9 +1,5 @@
 #pragma once
-#include <stdlib.h>
+#include <stddef.h>
 
-template<typename T>
-void iter(T *arr, size_t len, void (*f)(T)) {
-  for (size_t i = 0; i < len; i++) {
-    f(arr[i]);
-  }
-}
+template <typename T>
+void iter(T *array, size_t length, void (*func)(T&));

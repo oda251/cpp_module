@@ -1,18 +1,24 @@
 #include <iostream>
 #include "iter.hpp"
 
-template<typename T>
-void test(T val) {
-	std::cout << val << std::endl;
+template <typename T>
+void iter(T *array, size_t length, void (*func)(T&)) {
+  for (size_t i = 0; i < length; i++) {
+    func(array[i]);
+  }
 }
 
-int main() {
-	unsigned int arr[] = {50, 51, 52, 53, 54, 55};
-	std::cout << "--- int ---\n";
-	iter(reinterpret_cast<int*>(arr), 5, test<int>);
-	std::cout << "--- char ---\n";
-	iter(reinterpret_cast<char*>(arr), 5, test<char>);
-		std::cout << "--- float ---\n";
-	iter(reinterpret_cast<float*>(arr), 5, test<float>);
-	return (0);
+template <typename T>
+void print(T &n) {
+	std::cout << n << std::endl;
+}
+
+int main(void) {
+	int array[] = {1, 2, 3, 4, 5};
+	std::cout << "print int array {1, 2, 3, 4, 5}" << std::endl;
+	iter(array, 5, print);
+	std::string array2[] = {"one", "two", "three", "four", "five"};
+	std::cout << "print string array {\"one\", \"two\", \"three\", \"four\", \"five\"}" << std::endl;
+	iter(array2, 5, print);
+	return 0;
 }
