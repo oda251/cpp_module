@@ -1,4 +1,5 @@
 *
+!readme.md
 !**/*.cpp
 !**/*.hpp
 !**/*.tpp
