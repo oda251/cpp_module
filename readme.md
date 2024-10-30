@@ -1,4 +1,5 @@
 ## number of lines
+```
 github.com/AlDanial/cloc v 2.02  T=0.15 s (1149.9 files/s, 51685.5 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
@@ -12,6 +13,7 @@ Bourne Shell                     1              2              2             11
 -------------------------------------------------------------------------------
 SUM:                           174            739            195           6887
 -------------------------------------------------------------------------------
+```
 
 ## themes
 - Overall, I studied basic usage of C++ including class, exception, type casting, and more.
