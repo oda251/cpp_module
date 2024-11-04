@@ -47,3 +47,11 @@ const char *Form::GradeTooLowException::what(void) const throw() {
 const char *Form::FormAlreadySignedException::what(void) const throw() {
 	return "Form is already signed";
 }
+
+std::ostream &operator<<(std::ostream &out, const Form &form) {
+	out << "Form " << form.getName() << " is ";
+	if (!form.getSigned())
+		out << "not ";
+	out << "signed, requires grade " << form.getSignGrade() << " to sign and grade " << form.getExecGrade() << " to execute";
+	return out;
+}
