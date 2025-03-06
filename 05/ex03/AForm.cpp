@@ -50,3 +50,11 @@ const char *AForm::FormAlreadySignedException::what(void) const throw() {
 const char *AForm::FormNotSignedException::what(void) const throw() {
 	return "AForm is not signed";
 }
+
+std::ostream &operator<<(std::ostream &out, const AForm &form) {
+	out << "Form " << form.getName() << " is ";
+	if (!form.getSigned())
+		out << "not ";
+	out << "signed, requires grade " << form.getSignGrade() << " to sign and grade " << form.getExecGrade() << " to execute";
+	return out;
+}

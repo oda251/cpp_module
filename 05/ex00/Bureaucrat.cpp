@@ -1,4 +1,4 @@
-w#include "Bureaucrat.hpp"
+#include "Bureaucrat.hpp"
 #include <string>
 #include <iostream>
 
