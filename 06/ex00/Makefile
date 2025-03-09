@@ -1,4 +1,4 @@
-NAME = app
+NAME = convert
 SRCS = main.cpp \
 	SchalarConverter.cpp
 
