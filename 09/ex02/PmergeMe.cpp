@@ -4,6 +4,8 @@
 
 #define MICROSECONDS_PER_SECOND 1000000.0
 
+int CNT = 0;
+
 // Constructor
 PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
   if (argc < 2) {
@@ -95,13 +97,16 @@ std::vector<int> PmergeMe::generateJacobsthalSequence(int n) {
 
   return sequence;
 }
-
+bool comp(int a, int b) {
+  CNT++;
+  return a < b;
+}
 // Binary insertion to maintain sorted order
 template <typename Container>
 void PmergeMe::binaryInsert(Container& sorted, int value,
                             typename Container::iterator end) {
   typename Container::iterator pos =
-      std::lower_bound(sorted.begin(), end, value);
+      std::lower_bound(sorted.begin(), end, value, comp);
   sorted.insert(pos, value);
 }
 
@@ -114,6 +119,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   if (n <= 1) return;
 
   if (n == 2) {
+    CNT++;
     if (arr[0] > arr[1]) {
       std::swap(arr[0], arr[1]);
     }
@@ -130,6 +136,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   for (size_t i = 0; i < pairCount; ++i) {
     int a = arr[2 * i];
     int b = arr[2 * i + 1];
+    CNT++;
     if (a > b) {
       pairs.push_back(std::make_pair(a, b));
     } else {
@@ -256,6 +263,7 @@ void PmergeMe::printResults(void) const {
   std::cout << "Time to process a range of " << origin_deque.size()
             << " elements with std::deque  : " << time_deque << " us"
             << std::endl;
+  std::cout << CNT / 2 << std::endl;
 }
 
 // Explicit template instantiation
