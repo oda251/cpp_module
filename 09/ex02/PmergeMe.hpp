@@ -27,7 +27,7 @@ class PmergeMe {
   void mergeInsertionSort(Container& arr);
   
   template <typename Container>
-  void binaryInsert(Container& sorted, int value);
+  void binaryInsert(Container& sorted, int value, typename Container::iterator end);
   
   int jacobsthal(int n);
   std::vector<int> generateJacobsthalSequence(int n);
