@@ -1,4 +1,7 @@
 #include "PmergeMe.hpp"
+#include <cctype>
+
+#define MICROSECONDS_PER_SECOND 1000000.0
 
 // Constructor
 PmergeMe::PmergeMe(int argc, char** argv)
@@ -163,7 +166,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   // Insert according to Jacobsthal sequence
   for (size_t i = 0; i < jacobSequence.size(); ++i) {
     int pos = jacobSequence[i] - 1;
-    if (pos < static_cast<int>(smaller.size()) && !inserted[pos]) {
+    if (pos >= 0 && pos < static_cast<int>(smaller.size()) && !inserted[pos]) {
       binaryInsert(mainChain, smaller[pos]);
       inserted[pos] = true;
     }
@@ -201,14 +204,14 @@ void PmergeMe::run(void) {
   clock_t start = clock();
   mergeInsertionSort(sorted_vector);
   clock_t end = clock();
-  time_vector = (double)(end - start) / CLOCKS_PER_SEC * 1000000.0;
+  time_vector = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
   
   // Sort with deque
   sorted_deque = origin_deque;
   start = clock();
   mergeInsertionSort(sorted_deque);
   end = clock();
-  time_deque = (double)(end - start) / CLOCKS_PER_SEC * 1000000.0;
+  time_deque = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
 }
 
 // Print results
