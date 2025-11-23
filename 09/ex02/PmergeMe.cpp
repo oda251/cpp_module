@@ -173,7 +173,10 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     int pos = jacobSequence[i] - 1;
     if (pos >= 0 && pos < static_cast<int>(pairs.size()) && !inserted[pos]) {
       // pairs[pos].second < pairs[pos].first, which is at index pos+1 in mainChain
-      typename Container::iterator endPos = mainChain.begin() + (pos + 2);
+      // We search up to and including pairs[pos].first's position
+      size_t searchLimit = static_cast<size_t>(pos + 2);
+      if (searchLimit > mainChain.size()) searchLimit = mainChain.size();
+      typename Container::iterator endPos = mainChain.begin() + searchLimit;
       binaryInsert(mainChain, pairs[pos].second, endPos);
       inserted[pos] = true;
     }
@@ -185,7 +188,10 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     for (int j = jacobSequence[i] - 2; j >= prevJacob; --j) {
       if (j >= 0 && j < static_cast<int>(pairs.size()) && !inserted[j]) {
         // pairs[j].second < pairs[j].first, which is at index j+1 in mainChain
-        typename Container::iterator endPos = mainChain.begin() + (j + 2);
+        // We search up to and including pairs[j].first's position
+        size_t searchLimit = static_cast<size_t>(j + 2);
+        if (searchLimit > mainChain.size()) searchLimit = mainChain.size();
+        typename Container::iterator endPos = mainChain.begin() + searchLimit;
         binaryInsert(mainChain, pairs[j].second, endPos);
         inserted[j] = true;
       }
@@ -196,7 +202,10 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   for (size_t i = 0; i < pairs.size(); ++i) {
     if (!inserted[i]) {
       // pairs[i].second < pairs[i].first, which is at index i+1 in mainChain
-      typename Container::iterator endPos = mainChain.begin() + (i + 2);
+      // We search up to and including pairs[i].first's position
+      size_t searchLimit = i + 2;
+      if (searchLimit > mainChain.size()) searchLimit = mainChain.size();
+      typename Container::iterator endPos = mainChain.begin() + searchLimit;
       binaryInsert(mainChain, pairs[i].second, endPos);
     }
   }
