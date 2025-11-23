@@ -23,8 +23,7 @@ PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
       throw std::invalid_argument("Invalid argument: empty string");
     }
     ss.clear();
-    ss.str("");
-    ss << argv[i];
+    ss.str(argv[i]);
     int value;
     ss >> value;
     if (value < 0 || ss.fail() || !ss.eof()) {
@@ -99,7 +98,8 @@ std::vector<int> PmergeMe::generateJacobsthalSequence(int n) {
 
 // Binary insertion to maintain sorted order
 template <typename Container>
-void PmergeMe::binaryInsert(Container& sorted, int value, typename Container::iterator end) {
+void PmergeMe::binaryInsert(Container& sorted, int value,
+                            typename Container::iterator end) {
   typename Container::iterator pos =
       std::lower_bound(sorted.begin(), end, value);
   sorted.insert(pos, value);
@@ -172,7 +172,8 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     // Convert Jacobsthal number (1-based) to array index (0-based)
     int pos = jacobSequence[i] - 1;
     if (pos >= 0 && pos < static_cast<int>(pairs.size()) && !inserted[pos]) {
-      // pairs[pos].second < pairs[pos].first, which is at index pos+1 in mainChain
+      // pairs[pos].second < pairs[pos].first, which is at index pos+1 in
+      // mainChain
       typename Container::iterator endPos = mainChain.begin() + (pos + 2);
       binaryInsert(mainChain, pairs[pos].second, endPos);
       inserted[pos] = true;
@@ -261,5 +262,7 @@ void PmergeMe::printResults(void) const {
 template void PmergeMe::mergeInsertionSort<std::vector<int> >(
     std::vector<int>&);
 template void PmergeMe::mergeInsertionSort<std::deque<int> >(std::deque<int>&);
-template void PmergeMe::binaryInsert<std::vector<int> >(std::vector<int>&, int, std::vector<int>::iterator);
-template void PmergeMe::binaryInsert<std::deque<int> >(std::deque<int>&, int, std::deque<int>::iterator);
+template void PmergeMe::binaryInsert<std::vector<int> >(
+    std::vector<int>&, int, std::vector<int>::iterator);
+template void PmergeMe::binaryInsert<std::deque<int> >(
+    std::deque<int>&, int, std::deque<int>::iterator);
