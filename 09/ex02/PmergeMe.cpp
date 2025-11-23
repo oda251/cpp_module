@@ -144,12 +144,12 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   // We'll use insertion sort to maintain the pairing
   for (size_t i = 1; i < pairs.size(); ++i) {
     std::pair<int, int> key = pairs[i];
-    int j = i - 1;
-    while (j >= 0 && pairs[j].first > key.first) {
-      pairs[j + 1] = pairs[j];
+    size_t j = i;
+    while (j > 0 && pairs[j - 1].first > key.first) {
+      pairs[j] = pairs[j - 1];
       --j;
     }
-    pairs[j + 1] = key;
+    pairs[j] = key;
   }
   
   // Step 3: Create the main chain starting with the first smaller element
@@ -172,6 +172,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   
   // Insert according to Jacobsthal sequence
   for (size_t i = 0; i < jacobSequence.size(); ++i) {
+    // Convert Jacobsthal number (1-based) to array index (0-based)
     int pos = jacobSequence[i] - 1;
     if (pos >= 0 && pos < static_cast<int>(pairs.size()) && !inserted[pos]) {
       binaryInsert(mainChain, pairs[pos].second);
@@ -179,6 +180,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     }
     
     // Insert elements between previous and current Jacobsthal number in reverse
+    // Subtracting 2 accounts for: -1 for 0-based indexing and -1 to exclude current position
     int prevJacob = (i == 0) ? 1 : jacobSequence[i - 1];
     for (int j = jacobSequence[i] - 2; j >= prevJacob; --j) {
       if (j >= 0 && j < static_cast<int>(pairs.size()) && !inserted[j]) {
