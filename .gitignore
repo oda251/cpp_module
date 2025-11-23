@@ -1,3 +1,7 @@
 *.out
 *.exe
 *.o
+09/ex02/PmergeMe
+09/ex02/debug_test
+09/ex02/full_test
+09/ex02/test_sort

@@ -6,37 +6,38 @@
 #include <ctime>
 #include <deque>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #define MAX_SIZE 3000
 
-struct Node {
-  int num;
-  Node* large;
-  Node* small;
-};
-
 class PmergeMe {
- public:
-  enum class ContainerType {
-    VECTOR,
-    DEQUE
-  };
-
  private:
   std::vector<int> origin_vector;
   std::deque<int> origin_deque;
   std::vector<int> sorted_vector;
   std::deque<int> sorted_deque;
-  long long time_vector;
-  long long time_deque;
-  void interpret_args(int argc, char** argv, ContainerType type);
+  double time_vector;
+  double time_deque;
+
+  // Helper functions
+  template <typename Container>
+  void mergeInsertionSort(Container& arr);
+  
+  template <typename Container>
+  void binaryInsert(Container& sorted, int value);
+  
+  int jacobsthal(int n);
+  std::vector<int> generateJacobsthalSequence(int n);
 
  public:
-  PmergeMe(void);
+  PmergeMe(int argc, char** argv);
   PmergeMe(const PmergeMe& other);
   PmergeMe& operator=(const PmergeMe& other);
   ~PmergeMe(void);
-  void solve(ContainerType type);
+  
+  void run(void);
+  void printResults(void) const;
 };
