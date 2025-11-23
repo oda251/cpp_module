@@ -124,8 +124,8 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   }
   
   // Step 1: Create pairs and sort each pair
-  Container larger;
-  Container smaller;
+  // We need to keep track of pairs - store as indices
+  std::vector<std::pair<int, int> > pairs;  // (larger_value, smaller_value)
   bool hasStraggler = (n % 2 == 1);
   int straggler = hasStraggler ? arr[n - 1] : 0;
   
@@ -134,57 +134,64 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     int a = arr[2 * i];
     int b = arr[2 * i + 1];
     if (a > b) {
-      larger.push_back(a);
-      smaller.push_back(b);
+      pairs.push_back(std::make_pair(a, b));
     } else {
-      larger.push_back(b);
-      smaller.push_back(a);
+      pairs.push_back(std::make_pair(b, a));
     }
   }
   
-  // Step 2: Recursively sort the larger elements
-  mergeInsertionSort(larger);
+  // Step 2: Sort pairs by their larger element using a simple sort
+  // We'll use insertion sort to maintain the pairing
+  for (size_t i = 1; i < pairs.size(); ++i) {
+    std::pair<int, int> key = pairs[i];
+    int j = i - 1;
+    while (j >= 0 && pairs[j].first > key.first) {
+      pairs[j + 1] = pairs[j];
+      --j;
+    }
+    pairs[j + 1] = key;
+  }
   
   // Step 3: Create the main chain starting with the first smaller element
   Container mainChain;
-  if (!smaller.empty()) {
-    mainChain.push_back(smaller[0]);
+  if (!pairs.empty()) {
+    mainChain.push_back(pairs[0].second);  // First smaller element
   }
   
-  // Add all larger elements to main chain
-  for (size_t i = 0; i < larger.size(); ++i) {
-    mainChain.push_back(larger[i]);
+  // Add all larger elements to main chain (they're already sorted)
+  for (size_t i = 0; i < pairs.size(); ++i) {
+    mainChain.push_back(pairs[i].first);
   }
   
   // Step 4: Insert remaining smaller elements using Jacobsthal sequence
-  std::vector<int> jacobSequence = generateJacobsthalSequence(smaller.size());
-  std::vector<bool> inserted(smaller.size(), false);
-  if (!smaller.empty()) {
-    inserted[0] = true;
+  std::vector<int> jacobSequence = generateJacobsthalSequence(pairs.size());
+  std::vector<bool> inserted(pairs.size(), false);
+  if (!pairs.empty()) {
+    inserted[0] = true;  // First element already in chain
   }
   
   // Insert according to Jacobsthal sequence
   for (size_t i = 0; i < jacobSequence.size(); ++i) {
     int pos = jacobSequence[i] - 1;
-    if (pos >= 0 && pos < static_cast<int>(smaller.size()) && !inserted[pos]) {
-      binaryInsert(mainChain, smaller[pos]);
+    if (pos >= 0 && pos < static_cast<int>(pairs.size()) && !inserted[pos]) {
+      binaryInsert(mainChain, pairs[pos].second);
       inserted[pos] = true;
     }
     
     // Insert elements between previous and current Jacobsthal number in reverse
     int prevJacob = (i == 0) ? 1 : jacobSequence[i - 1];
     for (int j = jacobSequence[i] - 2; j >= prevJacob; --j) {
-      if (j >= 0 && j < static_cast<int>(smaller.size()) && !inserted[j]) {
-        binaryInsert(mainChain, smaller[j]);
+      if (j >= 0 && j < static_cast<int>(pairs.size()) && !inserted[j]) {
+        binaryInsert(mainChain, pairs[j].second);
         inserted[j] = true;
       }
     }
   }
   
   // Insert any remaining elements
-  for (size_t i = 0; i < smaller.size(); ++i) {
+  for (size_t i = 0; i < pairs.size(); ++i) {
     if (!inserted[i]) {
-      binaryInsert(mainChain, smaller[i]);
+      binaryInsert(mainChain, pairs[i].second);
     }
   }
   
