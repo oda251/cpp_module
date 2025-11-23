@@ -22,6 +22,8 @@ PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
     if (!argv[i] || !*argv[i]) {
       throw std::invalid_argument("Invalid argument: empty string");
     }
+    ss.clear();
+    ss.str("");
     ss << argv[i];
     int value;
     ss >> value;
@@ -97,9 +99,9 @@ std::vector<int> PmergeMe::generateJacobsthalSequence(int n) {
 
 // Binary insertion to maintain sorted order
 template <typename Container>
-void PmergeMe::binaryInsert(Container& sorted, int value) {
+void PmergeMe::binaryInsert(Container& sorted, int value, typename Container::iterator end) {
   typename Container::iterator pos =
-      std::lower_bound(sorted.begin(), sorted.end(), value);
+      std::lower_bound(sorted.begin(), end, value);
   sorted.insert(pos, value);
 }
 
@@ -170,7 +172,9 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     // Convert Jacobsthal number (1-based) to array index (0-based)
     int pos = jacobSequence[i] - 1;
     if (pos >= 0 && pos < static_cast<int>(pairs.size()) && !inserted[pos]) {
-      binaryInsert(mainChain, pairs[pos].second);
+      // pairs[pos].second < pairs[pos].first, which is at index pos+1 in mainChain
+      typename Container::iterator endPos = mainChain.begin() + (pos + 2);
+      binaryInsert(mainChain, pairs[pos].second, endPos);
       inserted[pos] = true;
     }
 
@@ -180,7 +184,9 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     int prevJacob = (i == 0) ? 1 : jacobSequence[i - 1];
     for (int j = jacobSequence[i] - 2; j >= prevJacob; --j) {
       if (j >= 0 && j < static_cast<int>(pairs.size()) && !inserted[j]) {
-        binaryInsert(mainChain, pairs[j].second);
+        // pairs[j].second < pairs[j].first, which is at index j+1 in mainChain
+        typename Container::iterator endPos = mainChain.begin() + (j + 2);
+        binaryInsert(mainChain, pairs[j].second, endPos);
         inserted[j] = true;
       }
     }
@@ -189,13 +195,16 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   // Insert any remaining elements
   for (size_t i = 0; i < pairs.size(); ++i) {
     if (!inserted[i]) {
-      binaryInsert(mainChain, pairs[i].second);
+      // pairs[i].second < pairs[i].first, which is at index i+1 in mainChain
+      typename Container::iterator endPos = mainChain.begin() + (i + 2);
+      binaryInsert(mainChain, pairs[i].second, endPos);
     }
   }
 
   // Insert straggler if exists
   if (hasStraggler) {
-    binaryInsert(mainChain, straggler);
+    // Straggler could be anywhere in the sorted sequence
+    binaryInsert(mainChain, straggler, mainChain.end());
   }
 
   // Copy result back
@@ -252,5 +261,5 @@ void PmergeMe::printResults(void) const {
 template void PmergeMe::mergeInsertionSort<std::vector<int> >(
     std::vector<int>&);
 template void PmergeMe::mergeInsertionSort<std::deque<int> >(std::deque<int>&);
-template void PmergeMe::binaryInsert<std::vector<int> >(std::vector<int>&, int);
-template void PmergeMe::binaryInsert<std::deque<int> >(std::deque<int>&, int);
+template void PmergeMe::binaryInsert<std::vector<int> >(std::vector<int>&, int, std::vector<int>::iterator);
+template void PmergeMe::binaryInsert<std::deque<int> >(std::deque<int>&, int, std::deque<int>::iterator);
