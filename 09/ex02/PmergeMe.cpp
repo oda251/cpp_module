@@ -1,13 +1,8 @@
 #include "PmergeMe.hpp"
-
 #include <cctype>
-
 #define MICROSECONDS_PER_SECOND 1000000.0
 
-int CNT = 0;
-
-// Constructor
-PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
+PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0), CNT(0) {
   if (argc < 2) {
     throw std::invalid_argument("No arguments provided.");
   }
@@ -18,8 +13,6 @@ PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
   }
 
   std::stringstream ss;
-
-  // Parse arguments and populate both containers
   for (int i = 1; i < argc; ++i) {
     if (!argv[i] || !*argv[i]) {
       throw std::invalid_argument("Invalid argument: empty string");
@@ -33,22 +26,20 @@ PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
       oss << "Invalid argument: " << argv[i];
       throw std::invalid_argument(oss.str());
     }
-
     origin_vector.push_back(static_cast<int>(value));
     origin_deque.push_back(static_cast<int>(value));
   }
 }
 
-// Copy constructor
 PmergeMe::PmergeMe(const PmergeMe& other)
     : origin_vector(other.origin_vector),
       origin_deque(other.origin_deque),
       sorted_vector(other.sorted_vector),
       sorted_deque(other.sorted_deque),
       time_vector(other.time_vector),
-      time_deque(other.time_deque) {}
+      time_deque(other.time_deque),
+      CNT(other.CNT) {}
 
-// Assignment operator
 PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
   if (this != &other) {
     origin_vector = other.origin_vector;
@@ -57,14 +48,13 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
     sorted_deque = other.sorted_deque;
     time_vector = other.time_vector;
     time_deque = other.time_deque;
+    CNT = other.CNT;
   }
   return *this;
 }
 
-// Destructor
 PmergeMe::~PmergeMe(void) {}
 
-// Calculate Jacobsthal number
 int PmergeMe::jacobsthal(int n) {
   if (n == 0) return 0;
   if (n == 1) return 1;
@@ -82,162 +72,152 @@ int PmergeMe::jacobsthal(int n) {
   return current;
 }
 
-// Generate Jacobsthal sequence for insertion order
 std::vector<int> PmergeMe::generateJacobsthalSequence(int n) {
   std::vector<int> sequence;
-  if (n == 0) return sequence;
-
-  int index = 3;
-  while (true) {
-    int jacob = jacobsthal(index);
-    if (jacob >= n) break;
-    sequence.push_back(jacob);
-    ++index;
+  for (int i = 2; jacobsthal(i) < n; ++i) {
+    sequence.push_back(jacobsthal(i));
   }
-
   return sequence;
 }
-bool comp(int a, int b) {
-  CNT++;
+
+namespace {
+int* comparison_counter = NULL;
+bool comparison_function(int a, int b) {
+  if (comparison_counter) {
+    (*comparison_counter)++;
+  }
   return a < b;
 }
-// Binary insertion to maintain sorted order
+}
+
 template <typename Container>
 void PmergeMe::binaryInsert(Container& sorted, int value,
                             typename Container::iterator end) {
+  comparison_counter = &this->CNT;
   typename Container::iterator pos =
-      std::lower_bound(sorted.begin(), end, value, comp);
+      std::lower_bound(sorted.begin(), end, value, comparison_function);
   sorted.insert(pos, value);
 }
 
-// Ford-Johnson merge insertion sort implementation
-template <typename Container>
-void PmergeMe::mergeInsertionSort(Container& arr) {
-  size_t n = arr.size();
+template <typename T>
+void sortPairs(T& pairs, int& CNT) {
+  if (pairs.size() <= 1) return;
 
-  // Base cases
-  if (n <= 1) return;
-
-  if (n == 2) {
-    CNT++;
-    if (arr[0] > arr[1]) {
-      std::swap(arr[0], arr[1]);
-    }
-    return;
-  }
-
-  // Step 1: Create pairs and sort each pair
-  // We need to keep track of pairs - store as indices
-  std::vector<std::pair<int, int> > pairs;  // (larger_value, smaller_value)
-  bool hasStraggler = (n % 2 == 1);
-  int straggler = hasStraggler ? arr[n - 1] : 0;
-
-  size_t pairCount = n / 2;
-  for (size_t i = 0; i < pairCount; ++i) {
-    int a = arr[2 * i];
-    int b = arr[2 * i + 1];
-    CNT++;
-    if (a > b) {
-      pairs.push_back(std::make_pair(a, b));
+  T left, right;
+  for (size_t i = 0; i < pairs.size(); i++) {
+    if (i < pairs.size() / 2) {
+      left.push_back(pairs[i]);
     } else {
-      pairs.push_back(std::make_pair(b, a));
+      right.push_back(pairs[i]);
     }
   }
 
-  // Step 2: Sort pairs by their larger element using a simple sort
-  // We'll use insertion sort to maintain the pairing
-  for (size_t i = 1; i < pairs.size(); ++i) {
-    std::pair<int, int> key = pairs[i];
-    size_t j = i;
-    while (j > 0 && pairs[j - 1].first > key.first) {
-      pairs[j] = pairs[j - 1];
-      --j;
-    }
-    pairs[j] = key;
-  }
+  sortPairs(left, CNT);
+  sortPairs(right, CNT);
 
-  // Step 3: Create the main chain starting with the first smaller element
-  Container mainChain;
-  if (!pairs.empty()) {
-    mainChain.push_back(pairs[0].second);  // First smaller element
-  }
-
-  // Add all larger elements to main chain (they're already sorted)
-  for (size_t i = 0; i < pairs.size(); ++i) {
-    mainChain.push_back(pairs[i].first);
-  }
-
-  // Step 4: Insert remaining smaller elements using Jacobsthal sequence
-  std::vector<int> jacobSequence = generateJacobsthalSequence(pairs.size());
-  std::vector<bool> inserted(pairs.size(), false);
-  if (!pairs.empty()) {
-    inserted[0] = true;  // First element already in chain
-  }
-
-  // Insert according to Jacobsthal sequence
-  for (size_t i = 0; i < jacobSequence.size(); ++i) {
-    // Convert Jacobsthal number (1-based) to array index (0-based)
-    int pos = jacobSequence[i] - 1;
-    if (pos >= 0 && pos < static_cast<int>(pairs.size()) && !inserted[pos]) {
-      // pairs[pos].second < pairs[pos].first, which is at index pos+1 in
-      // mainChain
-      typename Container::iterator endPos = mainChain.begin() + (pos + 2);
-      binaryInsert(mainChain, pairs[pos].second, endPos);
-      inserted[pos] = true;
-    }
-
-    // Insert elements between previous and current Jacobsthal number in reverse
-    // Subtracting 2 accounts for: -1 for 0-based indexing and -1 to exclude
-    // current position
-    int prevJacob = (i == 0) ? 1 : jacobSequence[i - 1];
-    for (int j = jacobSequence[i] - 2; j >= prevJacob; --j) {
-      if (j >= 0 && j < static_cast<int>(pairs.size()) && !inserted[j]) {
-        // pairs[j].second < pairs[j].first, which is at index j+1 in mainChain
-        typename Container::iterator endPos = mainChain.begin() + (j + 2);
-        binaryInsert(mainChain, pairs[j].second, endPos);
-        inserted[j] = true;
-      }
+  size_t i = 0, j = 0, k = 0;
+  while (i < left.size() && j < right.size()) {
+    CNT++;
+    if (left[i].a < right[j].a) {
+      pairs[k++] = left[i++];
+    } else {
+      pairs[k++] = right[j++];
     }
   }
-
-  // Insert any remaining elements
-  for (size_t i = 0; i < pairs.size(); ++i) {
-    if (!inserted[i]) {
-      // pairs[i].second < pairs[i].first, which is at index i+1 in mainChain
-      typename Container::iterator endPos = mainChain.begin() + (i + 2);
-      binaryInsert(mainChain, pairs[i].second, endPos);
-    }
+  while (i < left.size()) {
+    pairs[k++] = left[i++];
   }
-
-  // Insert straggler if exists
-  if (hasStraggler) {
-    // Straggler could be anywhere in the sorted sequence
-    binaryInsert(mainChain, straggler, mainChain.end());
+  while (j < right.size()) {
+    pairs[k++] = right[j++];
   }
-
-  // Copy result back
-  arr = mainChain;
 }
 
-// Run the sorting algorithm on both containers
+template <typename Container, typename T>
+void PmergeMe::mergeInsertionSort(Container& arr, T& dummy) {
+  (void)dummy;
+  size_t n = arr.size();
+  if (n <= 1) return;
+
+  T pairs;
+  int straggler;
+  bool hasStraggler = false;
+  if (n % 2 != 0) {
+    straggler = arr.back();
+    hasStraggler = true;
+    arr.pop_back();
+  }
+
+  for (size_t i = 0; i < arr.size(); i += 2) {
+    CNT++;
+    if (arr[i] > arr[i + 1]) {
+      pairs.push_back((Node){arr[i], arr[i + 1]});
+    } else {
+      pairs.push_back((Node){arr[i + 1], arr[i]});
+    }
+  }
+
+  sortPairs(pairs, this->CNT);
+
+  Container main_chain;
+  Container pend_chain;
+  for (size_t i = 0; i < pairs.size(); i++) {
+    main_chain.push_back(pairs[i].a);
+    pend_chain.push_back(pairs[i].b);
+  }
+  if (!pend_chain.empty()) {
+    main_chain.insert(main_chain.begin(), pend_chain.front());
+  }
+
+  std::vector<int> jacobsthal_sequence = generateJacobsthalSequence(pend_chain.size() + 1);
+  int last_jacob = 1;
+  for (size_t i = 0; i < jacobsthal_sequence.size(); i++) {
+    int jacob = jacobsthal_sequence[i];
+    for (int j = jacob; j > last_jacob; j--) {
+      if (j > (int)pend_chain.size()) continue;
+      typename Container::iterator end = main_chain.begin();
+      std::advance(end, j);
+      binaryInsert(main_chain, pend_chain[j - 1], end);
+    }
+    last_jacob = jacob;
+  }
+  for (size_t i = last_jacob; i < pend_chain.size(); i++) {
+    binaryInsert(main_chain, pend_chain[i], main_chain.end());
+  }
+
+  if (hasStraggler) {
+    binaryInsert(main_chain, straggler, main_chain.end());
+  }
+  arr = main_chain;
+}
+
 void PmergeMe::run(void) {
-  // Sort with vector
   sorted_vector = origin_vector;
   clock_t start = clock();
-  mergeInsertionSort(sorted_vector);
+  std::vector<Node> dummy_vector;
+  CNT = 0;
+  mergeInsertionSort(sorted_vector, dummy_vector);
   clock_t end = clock();
   time_vector =
       (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
+  int vector_comparisons = CNT;
 
-  // Sort with deque
   sorted_deque = origin_deque;
   start = clock();
-  mergeInsertionSort(sorted_deque);
+  std::deque<Node> dummy_deque;
+  CNT = 0;
+  mergeInsertionSort(sorted_deque, dummy_deque);
   end = clock();
   time_deque = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
+  int deque_comparisons = CNT;
+
+  // For printing, we'll just show the vector's comparison count,
+  // as they should be identical.
+  CNT = vector_comparisons;
+  if (vector_comparisons != deque_comparisons) {
+    std::cerr << "Warning: comparison counts differ between vector and deque." << std::endl;
+  }
 }
 
-// Print results
 void PmergeMe::printResults(void) const {
   std::cout << "Before: ";
   for (size_t i = 0; i < origin_vector.size() && i < 5; ++i) {
@@ -263,13 +243,13 @@ void PmergeMe::printResults(void) const {
   std::cout << "Time to process a range of " << origin_deque.size()
             << " elements with std::deque  : " << time_deque << " us"
             << std::endl;
-  std::cout << CNT / 2 << std::endl;
+  std::cout << "Comparisons: " << CNT << std::endl;
 }
 
-// Explicit template instantiation
-template void PmergeMe::mergeInsertionSort<std::vector<int> >(
-    std::vector<int>&);
-template void PmergeMe::mergeInsertionSort<std::deque<int> >(std::deque<int>&);
+template void PmergeMe::mergeInsertionSort<std::vector<int>, std::vector<PmergeMe::Node> >(
+    std::vector<int>&, std::vector<PmergeMe::Node>&);
+template void PmergeMe::mergeInsertionSort<std::deque<int>, std::deque<PmergeMe::Node> >(
+    std::deque<int>&, std::deque<PmergeMe::Node>&);
 template void PmergeMe::binaryInsert<std::vector<int> >(
     std::vector<int>&, int, std::vector<int>::iterator);
 template void PmergeMe::binaryInsert<std::deque<int> >(
