@@ -21,11 +21,16 @@ class PmergeMe {
   std::deque<int> sorted_deque;
   double time_vector;
   double time_deque;
+  int CNT;
 
+  struct Node {
+    int a;
+    int b;
+  };
   // Helper functions
-  template <typename Container>
-  void mergeInsertionSort(Container& arr);
-  
+  template <typename Container, typename T>
+  void mergeInsertionSort(Container& arr, T& dummy);
+
   template <typename Container>
   void binaryInsert(Container& sorted, int value, typename Container::iterator end);
   
