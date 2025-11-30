@@ -197,9 +197,9 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
 // 実際に両方のコンテナでソートを実行
 void PmergeMe::run(void) {
   // std::vector でソート
-  std::vector<t_data> copied_vector;
+  std::vector<t_data*> copied_vector;
   for (size_t i = 0; i < origin_vector.size(); ++i) {
-    t_data data(origin_vector[i]);
+    t_data* data = new t_data(origin_vector[i]);
     copied_vector.push_back(data);
   }
   clock_t start = clock();
@@ -209,9 +209,9 @@ void PmergeMe::run(void) {
       (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
 
   // std::deque でソート
-  std::deque<t_data> copied_deque;
+  std::deque<t_data*> copied_deque;
   for (size_t i = 0; i < origin_deque.size(); ++i) {
-    t_data data(origin_deque[i]);
+    t_data* data = new t_data(origin_deque[i]);
     copied_deque.push_back(data);
   }
   start = clock();
