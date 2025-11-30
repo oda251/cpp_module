@@ -8,21 +8,22 @@
 
 #define MICROSECONDS_PER_SECOND 1000000.0
 
+s_data::s_data(int n) : larger(NULL), smaller(NULL), value(n) {}
 bool s_data::operator<(const s_data& other) const {
   return this->value < other.value;
 }
 bool s_data::operator>(const s_data& other) const {
   return this->value > other.value;
 }
-s_data::s_data(s_data* a, s_data* b) {
-  if (a->value > b->value) {
-    this->larger = a;
-    this->smaller = b;
-    this->value = a->value;
+s_data::s_data(s_data a, s_data b) {
+  if (a.value > b.value) {
+    this->larger = &a;
+    this->smaller = &b;
+    this->value = a.value;
   } else {
-    this->larger = b;
-    this->smaller = a;
-    this->value = b->value;
+    this->larger = &b;
+    this->smaller = &a;
+    this->value = b.value;
   }
 }
 
@@ -129,8 +130,8 @@ int PmergeMe::binaryInsert(Container& sorted, int value,
 }
 
 // Ford-Johnson（マージ挿入）ソートの実装
-template <typename DataContainer, typename IntContainer>
-void PmergeMe::mergeInsertionSort(DataContainer& arr, IntContainer& result) {
+template <typename Container>
+void PmergeMe::mergeInsertionSort(Container& arr) {
   size_t n = arr.size();
 
   // 基底ケース
@@ -143,7 +144,7 @@ void PmergeMe::mergeInsertionSort(DataContainer& arr, IntContainer& result) {
     return;
   }
 
-  // ステップ1: ペアを作成して各ペアをソート
+  // ステップ1: 上り；ペア作成
   std::vector<t_data> pairs;
 
   size_t pairCount = n / 2;
@@ -151,31 +152,19 @@ void PmergeMe::mergeInsertionSort(DataContainer& arr, IntContainer& result) {
   for (size_t i = 0; i < pairCount; ++i) {
     t_data a = arr[2 * i];
     t_data b = arr[2 * i + 1];
-    t_data data;
-    if (a.value > b.value) {
-      data.larger = &a;
-      data.smaller = &b;
-      data.value = a.value;
-    } else {
-      data.larger = &b;
-      data.smaller = &a;
-      data.value = b.value;
-    }
+    // ここで大小比較を行い、ペアを作成
+    t_data data(a, b);
     pairs.push_back(data);
   }
 
-  // ステップ2: ペアの "大きい方" によってソート
-  // Ford‑Johnson の考え方に従い、まず大きい要素群を再帰的にソートし、
-  // その順序に従ってペアを並べ替える（再帰ステップ）
+  // ステップ2: 下り；ペア展開
   if (!pairs.empty()) {
-    // 大きい要素群を再帰的にソート（Ford‑Johnson の再帰部分）
-    mergeInsertionSort(pairs, result);
+    // pairsがソートされて帰ってくる
+    mergeInsertionSort(pairs);
+    Container result;
 
-    result.insert(result.begin(), pairs.begin()->larger->value);
-    std::vector<int> largeIdxs;
-    for (size_t i = 0; i < pairs.size(); ++i) {
-      largeIdxs.push_back(i + 1);
-    }
+    // 先頭pairのsmallerをソート済みの先頭に挿入
+    result.push_back(pairs[0].smaller->value);
 
     std::vector<int> jacobSequence = generateJacobsthalSequence(pairs.size());
 
@@ -185,7 +174,7 @@ void PmergeMe::mergeInsertionSort(DataContainer& arr, IntContainer& result) {
       for (size_t i = jacob_cursor + jacobSequence[jacob_idx] - 1;
            i >= jacob_cursor; --i) {
         if (i >= pairs.size()) continue;
-        int inserted_idx = binaryInsert<IntContainer>(
+        int inserted_idx = binaryInsert<Container>(
             result, pairs[largeIdxs[i]].larger->value, result.end());
         for (size_t j = 0; j < largeIdxs.size(); ++j) {
           if (largeIdxs[j] >= inserted_idx) {
@@ -207,8 +196,7 @@ void PmergeMe::run(void) {
   // std::vector でソート
   std::vector<t_data> copied_vector;
   for (size_t i = 0; i < origin_vector.size(); ++i) {
-    t_data data;
-    data.value = origin_vector[i];
+    t_data data(origin_vector[i]);
     copied_vector.push_back(data);
   }
   clock_t start = clock();
@@ -220,8 +208,7 @@ void PmergeMe::run(void) {
   // std::deque でソート
   std::deque<t_data> copied_deque;
   for (size_t i = 0; i < origin_deque.size(); ++i) {
-    t_data data;
-    data.value = origin_deque[i];
+    t_data data(origin_deque[i]);
     copied_deque.push_back(data);
   }
   start = clock();

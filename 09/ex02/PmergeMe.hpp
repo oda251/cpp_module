@@ -23,8 +23,8 @@ class PmergeMe {
   double time_deque;
 
   // Helper functions
-  template <typename DataContainer, typename IntContainer>
-  void mergeInsertionSort(DataContainer& arr, IntContainer& result);
+  template <typename Container>
+  void mergeInsertionSort(Container& arr);
 
   template <typename Container>
   int binaryInsert(Container& sorted, int value,
@@ -50,6 +50,7 @@ typedef struct s_data {
 
   bool operator<(const s_data& other) const;
   bool operator>(const s_data& other) const;
-  s_data(s_data* a, s_data* b);
+  s_data(int n);
+  s_data(s_data a, s_data b);
 
 } t_data;
