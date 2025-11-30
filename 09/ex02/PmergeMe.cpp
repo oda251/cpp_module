@@ -161,10 +161,13 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
   if (!pairs.empty()) {
     // pairsがソートされて帰ってくる
     mergeInsertionSort(pairs);
-    Container result;
+    std::vector<int> largeIdxs;
+    for (size_t i = 0; i < pairs.size(); ++i) {
+      largeIdxs.push_back(i + 1);
+    }
 
-    // 先頭pairのsmallerをソート済みの先頭に挿入
-    result.push_back(pairs[0].smaller->value);
+    Container result;
+    result.push_back(pairs[0].smaller);
 
     std::vector<int> jacobSequence = generateJacobsthalSequence(pairs.size());
 
