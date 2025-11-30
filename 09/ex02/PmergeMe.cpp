@@ -167,7 +167,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
     }
 
     Container result;
-    result.push_back(pairs[0].smaller);
+    result.push_back(*(pairs.begin()->smaller));
 
     std::vector<int> jacobSequence = generateJacobsthalSequence(pairs.size());
 
@@ -186,11 +186,11 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
         }
       }
     }
-  }
 
-  if (n % 2 == 1) {
-    // 余りの要素がある場合は最後に挿入
-    binaryInsert<IntContainer>(result, arr[n - 1].value, result.end());
+    if (n % 2 == 1) {
+      // 余りの要素がある場合は最後に挿入
+      binaryInsert<Container>(result, arr[n - 1].value, result.end());
+    }
   }
 }
 
@@ -203,7 +203,7 @@ void PmergeMe::run(void) {
     copied_vector.push_back(data);
   }
   clock_t start = clock();
-  mergeInsertionSort(copied_vector, sorted_vector);
+  mergeInsertionSort(copied_vector);
   clock_t end = clock();
   time_vector =
       (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
@@ -215,7 +215,7 @@ void PmergeMe::run(void) {
     copied_deque.push_back(data);
   }
   start = clock();
-  mergeInsertionSort(copied_deque, sorted_deque);
+  mergeInsertionSort(copied_deque);
   end = clock();
   time_deque = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
 }
@@ -250,9 +250,9 @@ void PmergeMe::printResults(void) const {
 
 // 明示的テンプレートインスタンス化
 template void PmergeMe::mergeInsertionSort<std::vector<t_data> >(
-    std::vector<t_data>&, std::vector<int>&);
+    std::vector<t_data>&);
 template void PmergeMe::mergeInsertionSort<std::deque<t_data> >(
-    std::deque<t_data>&, std::deque<int>&);
+    std::deque<t_data>&);
 template int PmergeMe::binaryInsert<std::vector<int> >(
     std::vector<int>&, int, std::vector<int>::iterator);
 template int PmergeMe::binaryInsert<std::deque<int> >(
