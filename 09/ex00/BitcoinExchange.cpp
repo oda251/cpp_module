@@ -23,7 +23,7 @@ void BitcoinExchange::_loadData(void) {
       throw std::runtime_error(std::string("Error: could not parse line: ") +
                                line);
     }
-    _data.push_back(data);
+    _data.insert(data);
   }
 }
 

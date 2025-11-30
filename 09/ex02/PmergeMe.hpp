@@ -23,12 +23,19 @@ class PmergeMe {
   double time_deque;
 
   // Helper functions
+<<<<<<< Updated upstream
   template <typename Container>
   void mergeInsertionSort(Container& arr);
   
+=======
+  template <typename DataContainer, typename IntContainer>
+  void mergeInsertionSort(DataContainer& arr, IntContainer& result);
+
+>>>>>>> Stashed changes
   template <typename Container>
-  void binaryInsert(Container& sorted, int value, typename Container::iterator end);
-  
+  int binaryInsert(Container& sorted, int value,
+                   typename Container::iterator end);
+
   int jacobsthal(int n);
   std::vector<int> generateJacobsthalSequence(int n);
 
@@ -37,7 +44,13 @@ class PmergeMe {
   PmergeMe(const PmergeMe& other);
   PmergeMe& operator=(const PmergeMe& other);
   ~PmergeMe(void);
-  
+
   void run(void);
   void printResults(void) const;
 };
+
+typedef struct s_data {
+  s_data* lh;
+  s_data* rh;
+  int value;
+} t_data;

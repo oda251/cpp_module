@@ -1,9 +1,10 @@
 #pragma once
-#include <string>
+#include <limits.h>
+
 #include <fstream>
 #include <iostream>
-#include <vector>
-#include <limits.h>
+#include <set>
+#include <string>
 
 #define DATABASE "data.csv"
 #define NOT_POSITIVE "Error: not a positive number."
@@ -22,8 +23,9 @@ class BitcoinExchange {
   BitcoinExchange(BitcoinExchange const& src);
   BitcoinExchange& operator=(BitcoinExchange const& rhs);
   void _loadData(void);
-  std::vector<Data> _data;
+  std::set<Data> _data;
   void calculate(const Data& data);
+
  public:
   BitcoinExchange(void);
   ~BitcoinExchange(void);

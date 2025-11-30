@@ -13,7 +13,7 @@ leaks: fclean
 	@valgrind --leak-check=full ./$(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(VERSION) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(VERSION) $(CFLAGS) $(OBJS) -o $(NAME) -g -fsanitize=address
 
 $(OBJS): $(SRCS)
 	$(CC) $(VERSION) $(CFLAGS) -c $(SRCS)

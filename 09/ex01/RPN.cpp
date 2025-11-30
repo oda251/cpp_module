@@ -1,26 +1,18 @@
 #include "RPN.hpp"
 
-long long stoi(const std::string& s) {
-  if (s.empty()) {
-    return LLONG_MIN;
+long long ft_stoi(const std::string& s) {
+  std::stringstream ss(s);
+  ss.clear();
+  ss.str(s);
+  long long n;
+  ss >> n;
+  if (ss.fail() || !ss.eof()) {
+    throw std::runtime_error("Error");
   }
-  size_t i = 0;
-  long long n = 0;
-  int sign = 1;
-  if (s[i] == '-') {
-    i++;
-    sign = -1;
+  if (n < 0 || n >= 10) {
+    throw std::runtime_error("Error");
   }
-  for (; i < s.size(); i++) {
-    if (!std::isdigit(s[i])) {
-      return LLONG_MIN;
-    }
-    n = n * 10 + s[i] - '0';
-    if (n > INT_MAX) {
-      return LLONG_MIN;
-    }
-  }
-  return n * sign;
+  return n;
 }
 
 int rpn(std::string const& expr) {
@@ -43,22 +35,35 @@ int rpn(std::string const& expr) {
       stack.pop();
       int b = stack.top();
       stack.pop();
+      int result;
       switch (token[0]) {
         case '+':
-          stack.push(b + a);
+          if (__builtin_add_overflow(a, b, &result)) {
+            throw std::runtime_error("Error");
+          }
+          stack.push(result);
           break;
         case '-':
-          stack.push(b - a);
+          if (__builtin_sub_overflow(b, a, &result)) {
+            throw std::runtime_error("Error");
+          }
+          stack.push(result);
           break;
         case '*':
-          stack.push(b * a);
+          if (__builtin_mul_overflow(a, b, &result)) {
+            throw std::runtime_error("Error");
+          }
+          stack.push(result);
           break;
         case '/':
+          if ((a == INT_MIN && b == -1) || (a == -1 && b == INT_MIN)) {
+            throw std::runtime_error("Error");
+          }
           stack.push(b / a);
           break;
       }
     } else {
-      long long n = stoi(token);
+      long long n = ft_stoi(token);
       if (n == LLONG_MIN) {
         throw std::runtime_error("Error");
       }
