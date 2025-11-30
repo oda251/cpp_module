@@ -44,7 +44,12 @@ class PmergeMe {
 };
 
 typedef struct s_data {
-  s_data* lh;
-  s_data* rh;
+  s_data* larger;
+  s_data* smaller;
   int value;
+
+  bool operator<(const s_data& other) const;
+  bool operator>(const s_data& other) const;
+  s_data(s_data* a, s_data* b);
+
 } t_data;

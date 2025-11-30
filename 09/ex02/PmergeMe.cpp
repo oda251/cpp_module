@@ -8,6 +8,24 @@
 
 #define MICROSECONDS_PER_SECOND 1000000.0
 
+bool s_data::operator<(const s_data& other) const {
+  return this->value < other.value;
+}
+bool s_data::operator>(const s_data& other) const {
+  return this->value > other.value;
+}
+s_data::s_data(s_data* a, s_data* b) {
+  if (a->value > b->value) {
+    this->larger = a;
+    this->smaller = b;
+    this->value = a->value;
+  } else {
+    this->larger = b;
+    this->smaller = a;
+    this->value = b->value;
+  }
+}
+
 // コンストラクタ
 PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
   if (argc < 2) {
@@ -135,12 +153,12 @@ void PmergeMe::mergeInsertionSort(DataContainer& arr, IntContainer& result) {
     t_data b = arr[2 * i + 1];
     t_data data;
     if (a.value > b.value) {
-      data.lh = &a;
-      data.rh = &b;
+      data.larger = &a;
+      data.smaller = &b;
       data.value = a.value;
     } else {
-      data.lh = &b;
-      data.rh = &a;
+      data.larger = &b;
+      data.smaller = &a;
       data.value = b.value;
     }
     pairs.push_back(data);
@@ -153,7 +171,7 @@ void PmergeMe::mergeInsertionSort(DataContainer& arr, IntContainer& result) {
     // 大きい要素群を再帰的にソート（Ford‑Johnson の再帰部分）
     mergeInsertionSort(pairs, result);
 
-    result.insert(result.begin(), pairs.begin()->lh->value);
+    result.insert(result.begin(), pairs.begin()->larger->value);
     std::vector<int> largeIdxs;
     for (size_t i = 0; i < pairs.size(); ++i) {
       largeIdxs.push_back(i + 1);
@@ -168,7 +186,7 @@ void PmergeMe::mergeInsertionSort(DataContainer& arr, IntContainer& result) {
            i >= jacob_cursor; --i) {
         if (i >= pairs.size()) continue;
         int inserted_idx = binaryInsert<IntContainer>(
-            result, pairs[largeIdxs[i]].lh->value, result.end());
+            result, pairs[largeIdxs[i]].larger->value, result.end());
         for (size_t j = 0; j < largeIdxs.size(); ++j) {
           if (largeIdxs[j] >= inserted_idx) {
             largeIdxs[j]++;
