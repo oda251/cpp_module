@@ -5,7 +5,6 @@
 #include <iostream>
 #include <iterator>
 #include <map>
-#include <set>
 #include <sstream>
 #include <vector>
 
@@ -65,17 +64,13 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
 PmergeMe::~PmergeMe(void) {}
 
 unsigned long long PmergeMe::getJacobsthal(unsigned long long n) {
-  if (n == 0) return 0;
-  if (n == 1) return 1;
-  unsigned long long prev2 = 0;
-  unsigned long long prev1 = 1;
-  unsigned long long curr = 0;
-  for (unsigned long long i = 2; i <= n; ++i) {
-    curr = prev1 + 2 * prev2;
-    prev2 = prev1;
-    prev1 = curr;
+  static std::vector<unsigned long> memo;
+  if (memo.empty()) {
+    memo.push_back(0);
+    memo.push_back(1);
   }
-  return curr;
+  if (memo.size() > n) return memo[n];
+  return memo[n] = getJacobsthal(n - 1) + 2 * getJacobsthal(n - 2);
 }
 
 template <typename Container>
