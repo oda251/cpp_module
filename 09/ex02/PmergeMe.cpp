@@ -74,26 +74,6 @@ unsigned long long PmergeMe::getJacobsthal(unsigned long long n) {
 }
 
 template <typename Container>
-typename Container::iterator PmergeMe::binarySearch(
-    typename Container::iterator begin, typename Container::iterator end,
-    int value) {
-  typename Container::iterator low = begin;
-  typename Container::iterator high = end;
-
-  while (low != high) {
-    typename Container::iterator mid = low;
-    std::advance(mid, std::distance(low, high) / 2);
-
-    if (*mid < value) {
-      low = ++mid;
-    } else {
-      high = mid;
-    }
-  }
-  return low;
-}
-
-template <typename Container>
 void PmergeMe::mergeInsertionSort(Container& arr) {
   size_t n = arr.size();
   if (n <= 1) return;
@@ -153,7 +133,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
       }
 
       typename Container::iterator pos =
-          binarySearch<Container>(arr.begin(), bit, pending_element);
+          std::lower_bound(arr.begin(), bit, pending_element);
       arr.insert(pos, pending_element);
     }
 
@@ -165,7 +145,7 @@ void PmergeMe::mergeInsertionSort(Container& arr) {
 
   if (has_straggler) {
     typename Container::iterator pos =
-        binarySearch<Container>(arr.begin(), arr.end(), straggler);
+        std::lower_bound(arr.begin(), arr.end(), straggler);
     arr.insert(pos, straggler);
   }
 }
