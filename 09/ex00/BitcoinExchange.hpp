@@ -16,6 +16,8 @@ struct Data {
   int month;
   int day;
   double rate;
+
+  bool operator<(const Data& other) const;
 };
 
 class BitcoinExchange {

@@ -11,8 +11,6 @@
 #include <utility>
 #include <vector>
 
-#define MAX_SIZE 3000
-
 class PmergeMe {
  private:
   std::vector<int> origin_vector;
@@ -26,12 +24,13 @@ class PmergeMe {
   template <typename Container>
   void mergeInsertionSort(Container& arr);
 
+  // Binary insert helper
   template <typename Container>
-  int binaryInsert(Container& sorted, int value,
-                   typename Container::iterator end);
+  typename Container::iterator binarySearch(typename Container::iterator begin,
+                                            typename Container::iterator end,
+                                            int value);
 
-  int jacobsthal(int n);
-  std::vector<int> generateJacobsthalSequence(int n);
+  unsigned long long getJacobsthal(unsigned long long n);
 
  public:
   PmergeMe(int argc, char** argv);
@@ -42,15 +41,3 @@ class PmergeMe {
   void run(void);
   void printResults(void) const;
 };
-
-typedef struct s_data {
-  s_data* larger;
-  s_data* smaller;
-  int value;
-
-  bool operator<(const s_data& other) const;
-  bool operator>(const s_data& other) const;
-  s_data(int n);
-  s_data(s_data a, s_data b);
-
-} t_data;

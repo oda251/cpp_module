@@ -21,6 +21,9 @@ $(OBJS): $(SRCS)
 run: all
 	@./$(NAME)
 
+test: all
+	@./$(NAME) `shuf -i 1-100000 -n 5 | tr "\n" " "`
+
 clean:
 	rm -f $(OBJS)
 

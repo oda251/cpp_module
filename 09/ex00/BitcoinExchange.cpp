@@ -1,5 +1,15 @@
 #include "BitcoinExchange.hpp"
 
+bool Data::operator<(const Data& other) const {
+  if (year != other.year) {
+    return year < other.year;
+  }
+  if (month != other.month) {
+    return month < other.month;
+  }
+  return day < other.day;
+}
+
 BitcoinExchange::BitcoinExchange(void) { _loadData(); }
 BitcoinExchange::BitcoinExchange(BitcoinExchange const& src) { *this = src; }
 BitcoinExchange::~BitcoinExchange(void) {}
@@ -95,8 +105,8 @@ Data parseData(const std::string& line) {
   }
   for (; i < line.size() && is_digit(line[i]); i++) {
     data.rate = data.rate * 10 + line[i] - '0';
-    if (data.rate > 9999) {
-      data.rate = 10000;
+    if (data.rate > 1000) {
+      data.rate = 1000;
       return data;
     }
   }
@@ -113,23 +123,17 @@ Data parseData(const std::string& line) {
 }
 
 void BitcoinExchange::calculate(const Data& data) {
-  std::cout << data.year << "-" << data.month << "-" << data.day << " => "
-            << data.rate << " = ";
-  double rate = 0;
-  for (size_t i = 0; i < _data.size(); i++) {
-    if (_data[i].year > data.year) {
-      break;
-    }
-    if (_data[i].year == data.year && _data[i].month > data.month) {
-      break;
-    }
-    if (_data[i].year == data.year && _data[i].month == data.month &&
-        _data[i].day > data.day) {
-      break;
-    }
-    rate = _data[i].rate;
+  std::set<Data>::iterator it = _data.upper_bound(data);
+
+  if (it == _data.begin()) {
+    std::cout << "Error: date too old." << std::endl;
+    return;
   }
-  std::cout << data.rate * rate << std::endl;
+  --it;
+
+  std::cout << data.year << "-" << (data.month < 10 ? "0" : "") << data.month
+            << "-" << (data.day < 10 ? "0" : "") << data.day << " => "
+            << data.rate << " = " << data.rate * it->rate << std::endl;
 }
 
 void BitcoinExchange::exchange(std::ifstream& input) {
@@ -145,7 +149,7 @@ void BitcoinExchange::exchange(std::ifstream& input) {
       std::cout << BAD_INPUT << line << std::endl;
     } else if (data.rate < 0) {
       std::cout << NOT_POSITIVE << std::endl;
-    } else if (data.rate > 9999) {
+    } else if (data.rate > 1000) {
       std::cout << TOO_LARGE << std::endl;
     } else {
       calculate(data);

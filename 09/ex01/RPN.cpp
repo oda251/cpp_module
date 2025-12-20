@@ -29,7 +29,7 @@ int rpn(std::string const& expr) {
     }
     if (token == "+" || token == "-" || token == "*" || token == "/") {
       if (stack.size() < 2) {
-        return 0;
+        throw std::runtime_error("Error");
       }
       int a = stack.top();
       stack.pop();
@@ -56,6 +56,9 @@ int rpn(std::string const& expr) {
           stack.push(result);
           break;
         case '/':
+          if (a == 0) {
+            throw std::runtime_error("Error");
+          }
           if ((a == INT_MIN && b == -1) || (a == -1 && b == INT_MIN)) {
             throw std::runtime_error("Error");
           }
