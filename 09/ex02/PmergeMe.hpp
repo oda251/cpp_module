@@ -2,7 +2,6 @@
 #include <limits.h>
 
 #include <algorithm>
-#include <cstdlib>
 #include <ctime>
 #include <deque>
 #include <iostream>
@@ -10,9 +9,16 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iterator>
 
 class PmergeMe {
  private:
+  struct ChainElement {
+    int value;
+    std::vector<ChainElement*> losers;
+    ChainElement(int v) : value(v) {}
+  };
+
   std::vector<int> origin_vector;
   std::deque<int> origin_deque;
   std::vector<int> sorted_vector;
@@ -20,15 +26,19 @@ class PmergeMe {
   double time_vector;
   double time_deque;
 
-  // Helper functions
-  template <typename Container>
-  void mergeInsertionSort(Container& arr);
+  struct ChainComparator {
+    bool operator()(const ChainElement* a, const ChainElement* b) const {
+      return a->value < b->value;
+    }
+  };
 
-  // Binary insert helper
+  // Internal Ford-Johnson implementation using ChainElement pointers
   template <typename Container>
-  typename Container::iterator binarySearch(typename Container::iterator begin,
-                                            typename Container::iterator end,
-                                            int value);
+  void fordJohnsonRecursive(Container& elements);
+
+  // Helper to handle the top-level sort for different containers
+  template <typename RawContainer, typename ElementContainer>
+  void sortContainer(RawContainer& raw, RawContainer& sorted);
 
   unsigned long long getJacobsthal(unsigned long long n);
 

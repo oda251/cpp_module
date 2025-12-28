@@ -1,13 +1,5 @@
 #include "PmergeMe.hpp"
 
-#include <algorithm>
-#include <deque>
-#include <iostream>
-#include <iterator>
-#include <map>
-#include <sstream>
-#include <vector>
-
 #define MICROSECONDS_PER_SECOND 1000000.0
 
 PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
@@ -16,7 +8,6 @@ PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
   }
 
   std::stringstream ss;
-  std::vector<int> check_dup;
 
   for (int i = 1; i < argc; ++i) {
     if (!argv[i] || !*argv[i]) {
@@ -31,13 +22,6 @@ PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
       oss << "Invalid argument: " << argv[i];
       throw std::invalid_argument(oss.str());
     }
-    if (std::find(check_dup.begin(), check_dup.end(), value) !=
-        check_dup.end()) {
-      std::ostringstream oss;
-      oss << "Duplicate argument: " << value;
-      throw std::invalid_argument(oss.str());
-    }
-    check_dup.push_back(value);
 
     origin_vector.push_back(static_cast<int>(value));
     origin_deque.push_back(static_cast<int>(value));
@@ -70,105 +54,118 @@ unsigned long long PmergeMe::getJacobsthal(unsigned long long n) {
     memo.push_back(1);
   }
   if (memo.size() > n) return memo[n];
-  return memo[n] = getJacobsthal(n - 1) + 2 * getJacobsthal(n - 2);
+  memo.push_back(getJacobsthal(n - 1) + 2 * getJacobsthal(n - 2));
+  return memo[n];
 }
 
 template <typename Container>
-void PmergeMe::mergeInsertionSort(Container& arr) {
-  size_t n = arr.size();
+void PmergeMe::fordJohnsonRecursive(Container& elements) {
+  size_t n = elements.size();
   if (n <= 1) return;
 
+  Container winners;
   bool has_straggler = (n % 2 != 0);
-  int straggler = 0;
-  if (has_straggler) {
-    straggler = arr.back();
-    arr.pop_back();
-  }
+  size_t pair_count = n / 2;
 
-  Container larger_elements;
-  std::map<int, int> pairs_map;
-
-  size_t pair_count = arr.size() / 2;
   for (size_t i = 0; i < pair_count; ++i) {
-    int a = arr[2 * i];
-    int b = arr[2 * i + 1];
+    ChainElement* e1 = elements[2 * i];
+    ChainElement* e2 = elements[2 * i + 1];
 
-    if (a < b) {
-      std::swap(a, b);
+    if (e1->value < e2->value) {
+      std::swap(e1, e2);
     }
-    pairs_map[a] = b;
-    larger_elements.push_back(a);
+    // e1 is now the winner, e2 is the loser at this level
+    e1->losers.push_back(e2);
+    winners.push_back(e1);
   }
 
-  mergeInsertionSort(larger_elements);
-  arr = larger_elements;
+  ChainElement* straggler = has_straggler ? elements.back() : NULL;
 
-  if (!arr.empty()) {
-    int first_partner = pairs_map[arr[0]];
-    arr.insert(arr.begin(), first_partner);
+  // Recursively sort the winners
+  fordJohnsonRecursive(winners);
+
+  // winners is now sorted: [w1, w2, w3, ..., wk]
+  // Create main_chain. The first loser (b1) is paired with w1.
+  // b1 < w1 is guaranteed, and it's always the first element of the sorted list.
+  Container main_chain;
+  main_chain.push_back(winners[0]->losers.back()); // b1
+  winners[0]->losers.pop_back();                   // Remove b1 from history
+  for (size_t i = 0; i < winners.size(); ++i) {
+    main_chain.push_back(winners[i]);
   }
 
-  Container main_chain = larger_elements;
-  size_t main_chain_size = main_chain.size();
-
+  // Pending elements (b2, b3, ...) are the top of the history stack of each winner
+  // Jacobsthal groups
   unsigned long long jacob_idx = 3;
-  unsigned long long prev_jacob_idx = 1;
+  size_t last_inserted_idx = 1; // b1 is already at index 0 in winners context
 
-  while (true) {
-    unsigned long long curr_st = PmergeMe::getJacobsthal(jacob_idx);
-    unsigned long long group_end = curr_st;
-    if (group_end > main_chain_size) {
-      group_end = main_chain_size;
-    }
+  while (last_inserted_idx < winners.size() || straggler) {
+    unsigned long long curr_jacob = getJacobsthal(jacob_idx);
+    size_t group_end = (curr_jacob > winners.size()) ? winners.size() : static_cast<size_t>(curr_jacob);
 
-    for (size_t i = group_end - 1; i >= prev_jacob_idx; --i) {
-      if (i >= main_chain.size()) continue;
-      int winner = main_chain[i];
-      int pending_element = pairs_map[winner];
-      int bound_element = winner;
+    // Insert group members in reverse order (b_group_end down to b_last+1)
+    for (size_t i = group_end; i > last_inserted_idx; --i) {
+      ChainElement* pending = winners[i - 1]->losers.back();
+      winners[i - 1]->losers.pop_back();
 
-      typename Container::iterator bit = arr.begin();
-      while (bit != arr.end() && *bit != bound_element) {
-        bit++;
-      }
-
+      // Binary search: the upper bound is the position of its winner in main_chain
+      typename Container::iterator it_winner =
+          std::find(main_chain.begin(), main_chain.end(), winners[i - 1]);
       typename Container::iterator pos =
-          std::lower_bound(arr.begin(), bit, pending_element);
-      arr.insert(pos, pending_element);
+          std::lower_bound(main_chain.begin(), it_winner, pending, ChainComparator());
+      main_chain.insert(pos, pending);
     }
 
-    prev_jacob_idx = group_end;
-    jacob_idx++;
+    if (last_inserted_idx == winners.size() && straggler) {
+      typename Container::iterator pos =
+          std::lower_bound(main_chain.begin(), main_chain.end(), straggler, ChainComparator());
+      main_chain.insert(pos, straggler);
+      straggler = NULL;
+    }
 
-    if (prev_jacob_idx >= main_chain_size) break;
+    last_inserted_idx = group_end;
+    jacob_idx++;
   }
 
-  if (has_straggler) {
-    typename Container::iterator pos =
-        std::lower_bound(arr.begin(), arr.end(), straggler);
-    arr.insert(pos, straggler);
+  elements = main_chain;
+}
+
+template <typename RawContainer, typename ElementContainer>
+void PmergeMe::sortContainer(RawContainer& raw, RawContainer& sorted) {
+  if (raw.empty()) return;
+
+  // 1. Create a pool of objects to manage memory safely
+  ElementContainer pool;
+  for (size_t i = 0; i < raw.size(); ++i) {
+    pool.push_back(ChainElement(raw[i]));
+  }
+
+  // 2. Create a container of pointers level 0
+  typename std::vector<ChainElement*> ptrs;
+  for (size_t i = 0; i < pool.size(); ++i) {
+    ptrs.push_back(&pool[i]);
+  }
+
+  // 3. Run recursive Ford-Johnson
+  fordJohnsonRecursive(ptrs);
+
+  // 4. Extract sorted values
+  sorted.clear();
+  for (size_t i = 0; i < ptrs.size(); ++i) {
+    sorted.push_back(ptrs[i]->value);
   }
 }
 
 void PmergeMe::run(void) {
-  std::vector<int> copied_vector = origin_vector;
-
   clock_t start = clock();
-  mergeInsertionSort(copied_vector);
+  sortContainer<std::vector<int>, std::vector<ChainElement> >(origin_vector, sorted_vector);
   clock_t end = clock();
-  time_vector =
-      (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
-
-  sorted_vector = copied_vector;
-
-  std::deque<int> copied_deque = origin_deque;
+  time_vector = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
 
   start = clock();
-  mergeInsertionSort(copied_deque);
+  sortContainer<std::deque<int>, std::deque<ChainElement> >(origin_deque, sorted_deque);
   end = clock();
   time_deque = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
-
-  sorted_deque = copied_deque;
 }
 
 void PmergeMe::printResults(void) const {
@@ -197,7 +194,3 @@ void PmergeMe::printResults(void) const {
             << " elements with std::deque  : " << time_deque << " us"
             << std::endl;
 }
-
-template void PmergeMe::mergeInsertionSort<std::vector<int> >(
-    std::vector<int>&);
-template void PmergeMe::mergeInsertionSort<std::deque<int> >(std::deque<int>&);
