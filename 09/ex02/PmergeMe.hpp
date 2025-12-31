@@ -37,7 +37,7 @@ class PmergeMe {
   void fordJohnsonRecursive(Container& elements);
 
   // Helper to handle the top-level sort for different containers
-  template <typename RawContainer, typename ElementContainer>
+  template <typename RawContainer, typename ElementContainer, typename PointerContainer>
   void sortContainer(RawContainer& raw, RawContainer& sorted);
 
   unsigned long long getJacobsthal(unsigned long long n);

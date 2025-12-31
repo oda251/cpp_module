@@ -17,10 +17,13 @@ PmergeMe::PmergeMe(int argc, char** argv) : time_vector(0), time_deque(0) {
     ss.str(argv[i]);
     int value;
     ss >> value;
-    if (value < 0 || ss.fail() || !ss.eof()) {
+    if (ss.fail() || !ss.eof()) {
       std::ostringstream oss;
       oss << "Invalid argument: " << argv[i];
       throw std::invalid_argument(oss.str());
+    }
+    if (value <= 0) {
+      throw std::invalid_argument("Error: Only positive integers are allowed.");
     }
 
     origin_vector.push_back(static_cast<int>(value));
@@ -130,7 +133,7 @@ void PmergeMe::fordJohnsonRecursive(Container& elements) {
   elements = main_chain;
 }
 
-template <typename RawContainer, typename ElementContainer>
+template <typename RawContainer, typename ElementContainer, typename PointerContainer>
 void PmergeMe::sortContainer(RawContainer& raw, RawContainer& sorted) {
   if (raw.empty()) return;
 
@@ -141,7 +144,7 @@ void PmergeMe::sortContainer(RawContainer& raw, RawContainer& sorted) {
   }
 
   // 2. Create a container of pointers level 0
-  typename std::vector<ChainElement*> ptrs;
+  PointerContainer ptrs;
   for (size_t i = 0; i < pool.size(); ++i) {
     ptrs.push_back(&pool[i]);
   }
@@ -158,12 +161,12 @@ void PmergeMe::sortContainer(RawContainer& raw, RawContainer& sorted) {
 
 void PmergeMe::run(void) {
   clock_t start = clock();
-  sortContainer<std::vector<int>, std::vector<ChainElement> >(origin_vector, sorted_vector);
+  sortContainer<std::vector<int>, std::vector<ChainElement>, std::vector<ChainElement*> >(origin_vector, sorted_vector);
   clock_t end = clock();
   time_vector = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
 
   start = clock();
-  sortContainer<std::deque<int>, std::deque<ChainElement> >(origin_deque, sorted_deque);
+  sortContainer<std::deque<int>, std::deque<ChainElement>, std::deque<ChainElement*> >(origin_deque, sorted_deque);
   end = clock();
   time_deque = (double)(end - start) / CLOCKS_PER_SEC * MICROSECONDS_PER_SECOND;
 }
