@@ -19,8 +19,10 @@ BitcoinExchange& BitcoinExchange::operator=(BitcoinExchange const& rhs) {
 }
 
 void BitcoinExchange::_loadData(void) {
-  std::ifstream file(DATABASE);
-  if (!file.is_open()) {
+  std::ifstream file;
+  try {
+    file.open(DATABASE);
+  } catch (...) {
     throw std::runtime_error(
         std::string("Error: could not open database file: ") + DATABASE);
   }
