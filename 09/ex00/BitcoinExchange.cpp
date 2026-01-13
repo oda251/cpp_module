@@ -37,6 +37,10 @@ void BitcoinExchange::_loadData(void) {
     }
     _data.insert(data);
   }
+  if (_data.empty()) {
+    throw std::runtime_error(std::string("Error: database file is empty: ") +
+                             DATABASE);
+  }
 }
 
 bool is_digit(char c) { return c >= '0' && c <= '9'; }
