@@ -9,7 +9,7 @@
 #define DATABASE "data.csv"
 #define NOT_POSITIVE "Error: not a positive number."
 #define BAD_INPUT "Error: bad input => "
-#define TOO_LARGE "Error: too large number."
+#define TOO_LARGE "Error: too large a number."
 
 struct Data {
   int year;

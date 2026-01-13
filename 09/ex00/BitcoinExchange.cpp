@@ -149,7 +149,7 @@ void BitcoinExchange::exchange(std::ifstream& input) {
       std::cout << BAD_INPUT << line << std::endl;
     } else if (data.rate < 0) {
       std::cout << NOT_POSITIVE << std::endl;
-    } else if (data.rate > 1000) {
+    } else if (data.rate >= 1000) {
       std::cout << TOO_LARGE << std::endl;
     } else {
       calculate(data);
